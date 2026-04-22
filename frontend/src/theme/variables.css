@@ -1,0 +1,35 @@
+:root {
+  /* Colors - Backgrounds */
+  --bg-primary: #0d0d10;      /* Sehr dunkles Anthrazit */
+  --bg-secondary: #16161a;    /* Für Cards und Sektionen */
+  --bg-tertiary: #1f1f23;     /* Für Inputs und Tooltips */
+
+  /* Colors - Text */
+  --text-primary: #f3f4f6;    /* Off-white für beste Lesbarkeit */
+  --text-secondary: #9ca3af;  /* Muted Gray für Beschreibungen */
+  --text-muted: #6b7280;      /* Für Deaktiviertes oder Footer */
+
+  /* Colors - Accents (Dark Purple) */
+  --accent: #7c3aed;          /* Haupt-Lila (Vivid Violet) */
+  --accent-hover: #8b5cf6;    /* Etwas heller für Interaktion */
+  --accent-muted: #4c1d95;    /* Dunkleres Lila für Borders/Subtiles */
+  --accent-soft: rgba(124, 58, 237, 0.15); /* Subtiler Glow/Background */
+
+  /* Structural */
+  --border: #2e303a;
+  --border-light: #3f3f46;
+  --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.2) 0 4px 6px -2px;
+  --shadow-accent: rgba(124, 58, 237, 0.2) 0 0 20px;
+
+  /* Spacing Scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 48px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
