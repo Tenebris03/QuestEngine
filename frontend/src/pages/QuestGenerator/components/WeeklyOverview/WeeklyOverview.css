@@ -1,0 +1,68 @@
+/**
+ * Styles für die WeeklyOverview Komponente.
+ */
+
+.weekly-overview {
+  width: 100%;
+}
+
+.weekly-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-xl);
+  gap: var(--space-md);
+}
+
+.weekly-title {
+  font-size: 2rem;
+  margin-bottom: var(--space-sm);
+}
+
+.weekly-subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.btn-regenerate {
+  padding: 12px 24px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 0 15px var(--accent-soft);
+  white-space: nowrap;
+}
+
+.btn-regenerate:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 0 25px var(--accent);
+  transform: translateY(-2px);
+}
+
+.btn-regenerate:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.quests-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+@media (max-width: 768px) {
+  .weekly-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-regenerate {
+    width: 100%;
+  }
+}

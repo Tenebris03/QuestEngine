@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Header.css';
+
 
 /**
  * Global Header Component
@@ -8,16 +10,19 @@ import './Header.css';
 const Header: React.FC = () => {
   return (
     <header className="header">
-      <a href="/" className="header-logo">
+      <Link to="/" className="header-logo">
         {/* Hier binden wir das SVG aus dem public-Ordner ein */}
         <img src="/favicon.svg" alt="MySpace Logo" width="28" height="28" />
         <span>QuestEngine</span>
-      </a>
+      </Link>
+
       
       <nav className="header-nav" aria-label="Hauptnavigation">
-        <a href="/" className="nav-link">Home</a>
-        <a href="/dashboard" className="nav-link">Dashboard</a>
-        <a href="/about" className="nav-link">About</a>
+        <Link to="/" className="nav-link">Home</Link>
+        <Link to="/quest-generator" className="nav-link">Quest Generator</Link>
+        <Link to="/dashboard" className="nav-link">Dashboard</Link>
+        <Link to="/about" className="nav-link">About</Link>
+
       </nav>
     </header>
   );
