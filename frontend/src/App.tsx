@@ -1,21 +1,28 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import Home from './pages/Home/Home'; // Unser neuer Page-Import!
+import Home from './pages/Home/Home';
+import QuestGenerator from './pages/QuestGenerator/QuestGenerator';
 import './App.css';
+
 
 function App() {
   return (
-    <>
+    <BrowserRouter>
       <Header />
       
       {/* Der #center Container hält den Inhalt mittig, egal welche Seite geladen wird */}
       <main id="center">
-        <Home />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/quest-generator" element={<QuestGenerator />} />
+        </Routes>
       </main>
 
       <Footer />
-    </>
+    </BrowserRouter>
   );
 }
+
 
 export default App;
