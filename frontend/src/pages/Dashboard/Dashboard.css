@@ -1,7 +1,7 @@
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2xl);
+  gap: var(--space-xl);
   width: 100%;
   max-width: 1100px;
 }
@@ -9,13 +9,55 @@
 /* === Hero Section === */
 .dashboard-hero {
   position: relative;
-  text-align: center;
-  padding: var(--space-2xl) var(--space-lg);
+  padding: var(--space-lg);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   overflow: hidden;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+
+.dashboard-hero > .dashboard-title,
+.dashboard-hero > .level-badge-wrapper,
+.dashboard-hero > .xp-text {
+  align-self: center;
+  text-align: center;
+}
+
+/* Level Badge with XP Ring */
+.level-badge-wrapper {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.xp-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+
+.xp-ring-bg {
+  fill: none;
+  stroke: var(--glass-border);
+  stroke-width: 5;
+}
+
+.xp-ring-fill {
+  fill: none;
+  stroke-width: 5;
+  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.5));
 }
 
 .level-badge {
@@ -23,31 +65,33 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100px;
-  height: 100px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-muted) 100%);
-  box-shadow: var(--shadow-glow), var(--shadow-lg);
-  border: 3px solid var(--glass-border);
+  box-shadow: var(--shadow-glow), var(--shadow-md);
+  border: 2px solid var(--glass-border);
+  position: relative;
+  z-index: 1;
 }
 
 .level-number {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   font-weight: 900;
   color: white;
   line-height: 1;
 }
 
 .level-label {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.6rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.8);
 }
 
 .dashboard-title {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 900;
   margin: 0;
   line-height: 1.1;
@@ -57,75 +101,423 @@
   background-clip: text;
 }
 
-.dashboard-subtitle {
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-/* === XP Bar === */
-.xp-section {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+.xp-text {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: var(--space-sm);
-}
-
-.xp-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-secondary);
 }
 
-.xp-bar-bg {
-  width: 100%;
-  height: 12px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
+.xp-percent {
+  background: linear-gradient(135deg, var(--accent-secondary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+/* === Stats Row (under hero) === */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-sm);
+}
+
+.stat-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-sm);
+  background: var(--bg-gradient-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  position: relative;
   overflow: hidden;
 }
 
-.xp-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-secondary) 100%);
-  border-radius: var(--radius-full);
-  transition: width 0.6s ease;
+.stat-pill:hover {
+  border-color: var(--stat-color, var(--accent));
+  box-shadow: 0 0 12px var(--stat-glow, rgba(139, 92, 246, 0.2));
+  transform: translateY(-2px);
 }
 
-/* === Stats Grid === */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--space-lg);
+.stat-pill-icon {
+  color: var(--stat-color, var(--accent));
+  opacity: 0.9;
+  transition: transform 0.3s ease;
+}
+
+.stat-pill:hover .stat-pill-icon {
+  transform: scale(1.15) rotate(-5deg);
+}
+
+.stat-pill-value {
+  font-size: 1.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--stat-color, var(--accent)), #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.stat-pill-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.stat-pill-bar-bg {
+  width: 100%;
+  height: 4px;
+  background: var(--glass-bg);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: 2px;
+  border: 1px solid var(--glass-border);
+}
+
+.stat-pill-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === Daily Quest Section === */
+.daily-quest-section {
   width: 100%;
 }
 
-.stat-value {
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--accent);
-  text-align: center;
-  margin-top: var(--space-sm);
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 var(--space-md) 0;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
+.daily-quest-card {
+  background: var(--bg-gradient-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.daily-quest-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-secondary), var(--accent));
+  opacity: 0.6;
+}
+
+.daily-quest-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-accent), var(--shadow-lg);
+}
+
+.daily-quest-card.empty {
+  background: var(--glass-bg);
+  border-style: dashed;
+}
+
+.daily-quest-card.empty::before {
+  display: none;
+}
+
+.daily-quest-card.quest-completed {
+  border-color: var(--success);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), var(--shadow-md);
+}
+
+.daily-quest-card.quest-completed::before {
+  background: linear-gradient(90deg, var(--success), var(--accent));
+}
+
+.daily-quest-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.daily-quest-day {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  min-width: 80px;
+}
+
+.daily-quest-title {
+  flex: 1;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.daily-quest-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.daily-quest-description {
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-md) 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Exercise Checklist */
+.daily-quest-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.exercise-check-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.exercise-check-row:hover {
+  border-color: var(--border-light);
+  background: var(--bg-tertiary);
+}
+
+.exercise-check-row.checked {
+  opacity: 0.5;
+  background: var(--success-soft);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.exercise-check-row.checked .exercise-check-name {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.exercise-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  background: var(--bg-tertiary);
+}
+
+.exercise-check-row:hover .exercise-checkbox {
+  border-color: var(--accent);
+}
+
+.exercise-check-row.checked .exercise-checkbox {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.exercise-check-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.exercise-check-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: color var(--transition-fast);
+}
+
+.exercise-check-detail {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.quest-completion-banner {
+  margin-top: var(--space-md);
+  padding: 10px 16px;
+  background: var(--success-soft);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+  animation: bannerPulse 2s ease-in-out infinite;
+}
+
+@keyframes bannerPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.2); }
+  50% { box-shadow: 0 0 12px 2px rgba(16, 185, 129, 0.15); }
+}
+
+.daily-quest-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.daily-quest-empty-content svg {
+  opacity: 0.5;
+}
+
+.daily-quest-empty-content p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Intensity colors for daily quest */
+.intensity-light .daily-quest-card::before {
+  background: linear-gradient(90deg, var(--success), transparent);
+}
+
+.intensity-medium .daily-quest-card::before {
+  background: linear-gradient(90deg, var(--warning), transparent);
+}
+
+.intensity-hard .daily-quest-card::before {
+  background: linear-gradient(90deg, var(--error), transparent);
+}
+
+/* Intensity tags reused from quest generator style */
+.quest-tag-intensity {
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.intensity-light .quest-tag-intensity {
+  background: var(--success-soft);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.intensity-medium .quest-tag-intensity {
+  background: var(--warning-soft);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.intensity-hard .quest-tag-intensity {
+  background: var(--error-soft);
+  color: var(--error);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.quest-duration {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  min-width: 60px;
+  text-align: right;
+  font-weight: 500;
+}
+
+/* === CTA Button === */
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-muted) 100%);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-glow);
+  border: none;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.3), var(--shadow-lg);
+}
+
+/* === Responsive === */
 @media (max-width: 768px) {
   .dashboard-hero {
-    padding: var(--space-xl) var(--space-md);
+    padding: var(--space-md);
   }
 
-  .stats-grid {
+  .stats-row {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .daily-quest-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .daily-quest-meta {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 
 @media (max-width: 480px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .level-badge-wrapper {
+    width: 80px;
+    height: 80px;
+  }
+
+  .level-badge {
+    width: 56px;
+    height: 56px;
+  }
+
+  .level-number {
+    font-size: 1.5rem;
+  }
+
+  .xp-ring {
+    width: 80px;
+    height: 80px;
   }
 }
 

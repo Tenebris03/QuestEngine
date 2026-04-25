@@ -1,13 +1,16 @@
-# Auth Implementation TODO
+# Dashboard Redesign TODO
 
-## Neue Dateien
-- [ ] `frontend/src/pages/Auth/Auth.css` – Shared Styles für Login/Register
-- [ ] `frontend/src/pages/Auth/Login.tsx` – Login-Seite mit Validierung
-- [ ] `frontend/src/pages/Auth/Register.tsx` – Registrierungs-Seite mit Validierung
+- [x] Add `getTodaysQuest()` helper to `QuestGeneratorService.ts`
+- [x] Replace horizontal XP bar with animated circular SVG ring around level badge
+- [x] Add "Daily Quest" section to Dashboard loading quest from localStorage
+- [x] Enhance stat cards with colors, icons, mini progress bars
+- [x] Update `Dashboard.css` with new animations and styling
+- [ ] Test responsiveness and animations
 
-## Zu bearbeitende Dateien
-- [ ] `frontend/src/context/UserContext.tsx` – Auth-State, login/logout/register
-- [ ] `frontend/src/components/Header/Header.tsx` – Conditional Rendering basierend auf Auth
-- [ ] `frontend/src/pages/Dashboard/Dashboard.tsx` – Fallback wenn nicht eingeloggt
-- [ ] `frontend/src/App.tsx` – Routes für /login und /register
+## Neue Aufgaben
+
+- [x] Hero kompakt gestalten (Level + Name nehmen weniger Platz ein)
+- [x] Daily Quest zeigt alle Übungen als abkreuzbare Liste
+- [x] Stats direkt unter/neben dem Level positionieren
+
 
