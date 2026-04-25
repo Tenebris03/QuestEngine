@@ -6,6 +6,8 @@ import Home from './pages/Home/Home';
 import QuestGenerator from './pages/QuestGenerator/QuestGenerator';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Settings from './pages/Settings/Settings';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
 import './App.css';
 
 
@@ -25,6 +27,8 @@ function App() {
             <Route path="/quest-generator" element={<QuestGenerator />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </main>
 

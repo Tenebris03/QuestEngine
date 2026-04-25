@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
 import './Header.css';
 
@@ -9,7 +9,13 @@ import './Header.css';
  * Beinhaltet das Logo, die Hauptnavigation und das Benutzerprofil.
  */
 const Header: React.FC = () => {
-  const { user } = useUser();
+  const { user, isAuthenticated, logout } = useUser();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <header className="header">
@@ -26,16 +32,28 @@ const Header: React.FC = () => {
         <Link to="/quest-generator" className="nav-link">Quest Generator</Link>
       </nav>
 
-      <Link to="/settings" className="header-profile" aria-label="Open settings">
-        <span className="header-username">{user.name}</span>
-        <img
-          src={user.profilePicture}
-          alt={`${user.name}'s profile`}
-          className="header-avatar"
-          width="36"
-          height="36"
-        />
-      </Link>
+      {isAuthenticated && user ? (
+        <div className="header-auth">
+          <Link to="/settings" className="header-profile" aria-label="Open settings">
+            <span className="header-username">{user.name}</span>
+            <img
+              src={user.profilePicture}
+              alt={`${user.name}'s profile`}
+              className="header-avatar"
+              width="36"
+              height="36"
+            />
+          </Link>
+          <button className="header-logout-btn" onClick={handleLogout} aria-label="Logout">
+            Logout
+          </button>
+        </div>
+      ) : (
+        <div className="header-auth">
+          <Link to="/login" className="nav-link">Login</Link>
+          <Link to="/register" className="nav-link nav-link--cta">Register</Link>
+        </div>
+      )}
     </header>
   );
 };

@@ -1,10 +1,40 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
 import Card from '../../components/Card/Card';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
+
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="dashboard-container">
+        <section className="dashboard-hero">
+          <div className="level-badge" style={{ background: 'var(--error-soft)', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
+            <span className="level-number" style={{ color: 'var(--error)' }}>!</span>
+            <span className="level-label">Locked</span>
+          </div>
+          <h1 className="dashboard-title">System Access Denied</h1>
+          <p className="dashboard-subtitle">You must be logged in to view your adventurer dashboard.</p>
+        </section>
+
+        <section>
+          <div className="stats-grid">
+            <Card title="Authentication Required" description="Your stats, quests, and progress are protected. Log in to access your personal dashboard.">
+              <Link to="/login" className="cta-button" style={{ marginTop: 'var(--space-md)', textDecoration: 'none', display: 'inline-flex' }}>
+                <span>Login to System</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </Link>
+            </Card>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   const xpPercent = Math.min(100, Math.round((user.experience / user.maxExperience) * 100));
 
   return (

@@ -17,11 +17,15 @@ export interface User {
 }
 
 interface UserContextType {
-  user: User;
+  user: User | null;
+  isAuthenticated: boolean;
+  login: (username: string, password: string) => boolean;
+  logout: () => void;
+  register: (username: string, email: string, password: string) => boolean;
   updateUser: (updates: Partial<User>) => void;
 }
 
-const defaultUser: User = {
+const mockUser: User = {
   name: 'ShadowWalker',
   profilePicture: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ShadowWalker',
   level: 12,
@@ -38,14 +42,35 @@ const defaultUser: User = {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User>(defaultUser);
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  const login = useCallback((username: string, password: string): boolean => {
+    if (username === 'admin' && password === 'admin') {
+      setUser(mockUser);
+      setIsAuthenticated(true);
+      return true;
+    }
+    return false;
+  }, []);
+
+  const logout = useCallback(() => {
+    setUser(null);
+    setIsAuthenticated(false);
+  }, []);
+
+  const register = useCallback((username: string, email: string, password: string): boolean => {
+    // Dummy-Registrierung ohne Backend – immer erfolgreich
+    console.log('Registered:', { username, email, password });
+    return true;
+  }, []);
 
   const updateUser = useCallback((updates: Partial<User>) => {
-    setUser((prev) => ({ ...prev, ...updates }));
+    setUser((prev) => (prev ? { ...prev, ...updates } : null));
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, updateUser }}>
+    <UserContext.Provider value={{ user, isAuthenticated, login, logout, register, updateUser }}>
       {children}
     </UserContext.Provider>
   );

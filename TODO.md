@@ -1,9 +1,13 @@
-# Implementation Plan
+# Auth Implementation TODO
 
-- [x] 1. Create `UserContext` with dummy user data and `updateUser` function.
-- [x] 2. Wrap `App.tsx` with `UserProvider` and add `/dashboard`, `/settings` routes.
-- [x] 3. Create `Dashboard` page (level, stats, XP bar).
-- [x] 4. Update `Header` with user avatar + name and new nav links.
-- [x] 5. Create `Settings` page (edit name + profile picture).
-- [ ] 6. Verify with `npm run dev`.
+## Neue Dateien
+- [ ] `frontend/src/pages/Auth/Auth.css` – Shared Styles für Login/Register
+- [ ] `frontend/src/pages/Auth/Login.tsx` – Login-Seite mit Validierung
+- [ ] `frontend/src/pages/Auth/Register.tsx` – Registrierungs-Seite mit Validierung
+
+## Zu bearbeitende Dateien
+- [ ] `frontend/src/context/UserContext.tsx` – Auth-State, login/logout/register
+- [ ] `frontend/src/components/Header/Header.tsx` – Conditional Rendering basierend auf Auth
+- [ ] `frontend/src/pages/Dashboard/Dashboard.tsx` – Fallback wenn nicht eingeloggt
+- [ ] `frontend/src/App.tsx` – Routes für /login und /register
 

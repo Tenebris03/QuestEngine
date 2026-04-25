@@ -1,16 +1,29 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
 import './Settings.css';
 
 const Settings: React.FC = () => {
-  const { user, updateUser } = useUser();
-  const [name, setName] = useState(user.name);
-  const [profilePicture, setProfilePicture] = useState(user.profilePicture);
+  const { user, updateUser, isAuthenticated } = useUser();
+  const [name, setName] = useState(user?.name ?? '');
+  const [profilePicture, setProfilePicture] = useState(user?.profilePicture ?? '');
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     updateUser({ name, profilePicture });
   };
+
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="settings-container">
+        <h1 className="settings-title">Settings</h1>
+        <p className="settings-subtitle">You must be logged in to customize your profile.</p>
+        <Link to="/login" className="settings-save-btn" style={{ textDecoration: 'none', display: 'inline-flex' }}>
+          Login to System
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="settings-container">
