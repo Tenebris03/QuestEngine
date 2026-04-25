@@ -23,7 +23,7 @@ const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
   const intensityClass = `intensity-${quest.intensity}`;
 
   return (
-    <article className={`quest-card ${intensityClass}`}>
+    <article className={`quest-card ${intensityClass}`} aria-expanded={expanded}>
       <div
         className="quest-header"
         onClick={() => setExpanded(!expanded)}

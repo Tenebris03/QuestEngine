@@ -1,12 +1,17 @@
-# Phase 1: React Paradigm Fixes
+# Design Revamp TODO
 
-## Tasks
-- [x] 1. Move services to global `src/services/`
-- [x] 2. Fix QuestCard accessibility (keyboard handling)
-- [x] 3. Remove broken `/dashboard` link from Header
-- [x] 4. Create `src/hooks/useQuestGenerator.ts` and refactor QuestGenerator.tsx
-- [ ] 5. Verify build and lint pass
+## Progress
 
-## Notes
-- Dashboard route is planned but not implemented yet
-- Services should be global per user confirmation
+- [x] 1. Create TODO.md
+- [x] 2. Update Design Tokens (`variables.css`)
+- [x] 3. Refine Typography (`typography.css`)
+- [x] 4. Global Layout (`index.css`, `App.css`)
+- [x] 5. Modernize Header (`Header.css`)
+- [x] 6. Redesign Home Page (`Home.css`, `Home.tsx`)
+- [x] 7. Refine QuestGenerator Page (`QuestGenerator.css`, `QuestGenerator.tsx`)
+- [x] 8. Overhaul QuestCard (`QuestCard.css`, `QuestCard.tsx`)
+- [x] 9. Modernize Form (`PreferenceForm.css`)
+- [x] 10. Polish WeeklyOverview (`WeeklyOverview.css`, `WeeklyOverview.tsx`)
+- [x] 11. Refine Card & Footer (`Card.css`, `Footer.css`, `Footer.tsx`)
+- [ ] 12. Run dev server and verify
+

@@ -1,51 +1,100 @@
 /* 1. Lokale Schriftart definieren */
 @font-face {
   font-family: 'Inter';
-  src: url('../assets/fonts/Inter-Variable.ttf') format('truetype');
-  /* Falls du eine .woff2 hast, nutze: format('woff2') */
-  font-weight: 100 900; /* Variable Font unterstützt alle Gewichte */
+  src: url('../assets/fonts/InterVariable.ttf') format('truetype');
+  font-weight: 100 900;
   font-style: normal;
-  font-display: swap; /* Verhindert unsichtbaren Text beim Laden */
+  font-display: swap;
 }
 
-/* 2. Schriftart anwenden */
+/* 2. Base Styles */
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 18px;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--text-primary);
   background-color: var(--bg-primary);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4 {
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
+/* 3. Heading Scale - More dramatic */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
   color: var(--text-primary);
-  line-height: 1.2;
+  line-height: 1.15;
   margin-bottom: var(--space-md);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
-h1 { font-size: 3.5rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.5rem; }
+h1 { font-size: clamp(2.5rem, 6vw, 4rem); }
+h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+h3 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+h4 { font-size: 1.25rem; font-weight: 600; }
 
+/* 4. Body Text */
 p {
   margin-bottom: var(--space-md);
   color: var(--text-secondary);
+  line-height: 1.7;
 }
 
+/* 5. Inline Code */
 code {
-  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-family: var(--font-mono);
   background: var(--bg-tertiary);
-  padding: 0.2em 0.4em;
+  padding: 0.2em 0.5em;
   border-radius: var(--radius-sm);
   font-size: 0.9em;
   color: var(--accent-hover);
+  border: 1px solid var(--border);
 }
 
+/* 6. Text Gradient Utilities */
+.text-gradient {
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-hover) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 7. Focus States */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
+
+/* 8. Selection */
+::selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: var(--text-primary);
+}
+
+/* 9. Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-light);
+}
+

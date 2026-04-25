@@ -3,61 +3,90 @@
  */
 
 .quest-card {
-  background: var(--bg-tertiary);
+  background: var(--bg-secondary);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: all 0.3s;
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+.quest-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  transition: width var(--transition-base);
 }
 
 .quest-card:hover {
   border-color: var(--border-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
-.intensity-light {
-  border-left: 4px solid #10b981;
-}
+/* Intensity indicators */
+.intensity-light::before { background: linear-gradient(180deg, var(--success), transparent); }
+.intensity-medium::before { background: linear-gradient(180deg, var(--warning), transparent); }
+.intensity-hard::before { background: linear-gradient(180deg, var(--error), transparent); }
 
-.intensity-medium {
-  border-left: 4px solid #f59e0b;
-}
-
-.intensity-hard {
-  border-left: 4px solid #ef4444;
-}
-
+/* Header */
 .quest-header {
   display: flex;
   align-items: center;
   gap: var(--space-md);
   padding: var(--space-md) var(--space-lg);
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background var(--transition-fast);
+  position: relative;
 }
 
 .quest-header:hover {
-  background: var(--bg-secondary);
+  background: var(--bg-tertiary);
 }
 
 .quest-header:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: -2px;
+  border-radius: var(--radius-lg);
+}
+
+/* Chevron indicator */
+.quest-header::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: rotate(45deg);
+  transition: transform var(--transition-base), border-color var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.quest-card[aria-expanded="true"] .quest-header::after {
+  transform: rotate(-135deg);
+  border-color: var(--accent);
 }
 
 .quest-day {
   font-weight: 700;
   color: var(--accent);
-  min-width: 100px;
-  font-size: 0.9rem;
+  min-width: 90px;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
 }
 
 .quest-title {
   flex: 1;
   margin: 0;
   font-size: 1.1rem;
+  font-weight: 600;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
 }
 
 .quest-meta {
@@ -66,48 +95,69 @@
   gap: var(--space-sm);
 }
 
+/* Intensity Tags */
 .quest-tag-intensity {
   padding: 4px 12px;
-  border-radius: var(--radius-sm);
-  font-size: 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .intensity-light .quest-tag-intensity {
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
+  background: var(--success-soft);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .intensity-medium .quest-tag-intensity {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  background: var(--warning-soft);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
 .intensity-hard .quest-tag-intensity {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
+  background: var(--error-soft);
+  color: var(--error);
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .quest-duration {
   font-size: 0.85rem;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   min-width: 70px;
   text-align: right;
+  font-weight: 500;
 }
 
+/* Details Panel */
 .quest-details {
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-lg);
   border-top: 1px solid var(--border);
-  background: var(--bg-secondary);
+  background: var(--bg-tertiary);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .quest-description {
   color: var(--text-secondary);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
   font-size: 0.95rem;
+  line-height: 1.6;
 }
 
+/* Exercise List */
 .exercise-list {
   list-style: none;
   padding: 0;
@@ -120,21 +170,28 @@
 .exercise-item {
   display: grid;
   grid-template-columns: 2fr 1.5fr 1fr;
-  gap: var(--space-sm);
-  padding: var(--space-sm);
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-sm);
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   font-size: 0.9rem;
+  transition: border-color var(--transition-fast);
+}
+
+.exercise-item:hover {
+  border-color: var(--border-light);
 }
 
 .exercise-name {
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .exercise-stats {
   color: var(--text-secondary);
   text-align: center;
+  font-weight: 500;
 }
 
 .exercise-rest {
@@ -143,31 +200,64 @@
   font-size: 0.85rem;
 }
 
+/* Equipment */
 .quest-equipment {
-  margin-top: var(--space-md);
-  padding-top: var(--space-md);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
   border-top: 1px solid var(--border);
   color: var(--text-secondary);
   font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
+.quest-equipment::before {
+  content: '🏋️';
+  font-size: 1rem;
+}
+
+/* Responsive */
 @media (max-width: 640px) {
   .quest-header {
     flex-wrap: wrap;
     gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
   }
 
   .quest-day {
     min-width: auto;
+    font-size: 0.8rem;
+  }
+
+  .quest-title {
+    font-size: 1rem;
+    width: 100%;
+    order: 3;
+  }
+
+  .quest-meta {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .quest-details {
+    padding: var(--space-md);
   }
 
   .exercise-item {
     grid-template-columns: 1fr;
     gap: var(--space-xs);
+    padding: var(--space-sm);
   }
 
   .exercise-stats,
   .exercise-rest {
     text-align: left;
   }
+
+  .quest-header::after {
+    display: none;
+  }
 }
+

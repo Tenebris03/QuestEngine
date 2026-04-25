@@ -9,6 +9,9 @@ import './App.css';
 function App() {
   return (
     <BrowserRouter>
+      {/* Ambient background glow effect */}
+      <div className="ambient-glow" aria-hidden="true" />
+      
       <Header />
       
       {/* Der #center Container hält den Inhalt mittig, egal welche Seite geladen wird */}

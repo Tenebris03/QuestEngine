@@ -31,8 +31,18 @@ const WeeklyOverview: React.FC<WeeklyOverviewProps> = ({ plan, onRegenerate }) =
             Dein Trainingsplan – Woche {plan.weekNumber}
           </h2>
           <p className="weekly-subtitle">
-            {plan.quests.length} Quests · {totalDuration} Minuten gesamt ·{' '}
-            {completedQuests}/{plan.quests.length} abgeschlossen
+            <span className="stat-chip">
+              <span className="chip-dot" />
+              {plan.quests.length} Quests
+            </span>
+            <span className="stat-chip">
+              <span className="chip-dot" />
+              {totalDuration} Minuten
+            </span>
+            <span className="stat-chip completed">
+              <span className="chip-dot" />
+              {completedQuests}/{plan.quests.length} abgeschlossen
+            </span>
           </p>
         </div>
         <button type="button" className="btn-regenerate" onClick={onRegenerate}>

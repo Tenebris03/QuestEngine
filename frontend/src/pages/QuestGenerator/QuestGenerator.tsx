@@ -41,10 +41,11 @@ const QuestGenerator: React.FC = () => {
 
       {/* WebGPU Warnung */}
       {!webgpuAvailable && (
-        <div className="ai-progress-container" style={{ borderColor: '#f59e0b' }}>
-          <p className="ai-progress-message" style={{ color: '#f59e0b' }}>
-            ⚠️ WebGPU ist nicht verfügbar. Die KI-Generierung wird nicht funktionieren.
-            Bitte verwenden Sie Chrome oder Edge in der neuesten Version.
+        <div className="ai-progress-container warning">
+          <p className="ai-progress-message">
+            <strong>⚠️ WebGPU nicht verfügbar</strong>
+            <br />
+            Die KI-Generierung wird nicht funktionieren. Bitte verwenden Sie Chrome oder Edge in der neuesten Version.
           </p>
         </div>
       )}
@@ -64,16 +65,18 @@ const QuestGenerator: React.FC = () => {
 
       {/* Fehlermeldung mit Retry */}
       {modelError && !aiProgress && (
-        <div className="ai-progress-container" style={{ borderColor: '#ef4444' }}>
-          <p className="ai-progress-message" style={{ color: '#ef4444', marginBottom: '12px' }}>
-            ❌ {modelError}
+        <div className="ai-progress-container error">
+          <p className="ai-progress-message" style={{ marginBottom: '16px' }}>
+            <strong>❌ Fehler</strong>
+            <br />
+            {modelError}
           </p>
           <button
             type="button"
             className="btn-primary"
             onClick={handleRetry}
             disabled={isGenerating}
-            style={{ padding: '8px 16px', fontSize: '0.9rem' }}
+            style={{ padding: '10px 20px', fontSize: '0.9rem' }}
           >
             Erneut versuchen
           </button>
