@@ -46,7 +46,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const login = useCallback((username: string, password: string): boolean => {
-    if (username === 'admin' && password === 'admin') {
+    if (username === 'admin' && password === 'admin123') {
       setUser(mockUser);
       setIsAuthenticated(true);
       return true;
