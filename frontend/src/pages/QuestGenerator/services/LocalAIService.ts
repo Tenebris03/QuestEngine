@@ -1,10 +1,10 @@
 /**
- * Local AI Service mit Transformers.js.
- * Nutzt ein kleines Text2Text-Modell für die Quest-Generierung.
- * Läuft komplett client-side im Browser und nutzt lokale Hardware.
+ * Local AI Service mit WebLLM.
+ * Nutzt ein lokales LLM für die Quest-Generierung.
+ * Läuft komplett client-side im Browser.
  */
 
-import { pipeline } from '@xenova/transformers';
+import { CreateMLCEngine, MLCEngine } from '@mlc-ai/web-llm';
 import type {
   UserPreferences,
   WeeklyPlan,
@@ -15,17 +15,18 @@ import type {
   IntensityLevel,
 } from '../QuestGenerator.types';
 
-const MODEL_NAME = 'Xenova/LaMini-Flan-T5-248M';
+const MODEL_NAME = 'Llama-3.2-1B-Instruct-q4f16_1-MLC';
 const DAYS = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
 
-let generatorPipeline: any = null;
+let engine: MLCEngine | null = null;
 let modelLoading = false;
+let lastError: string | null = null;
 
 /**
  * Prüft, ob das KI-Modell bereits geladen ist.
  */
 export function isModelLoaded(): boolean {
-  return generatorPipeline !== null;
+  return engine !== null;
 }
 
 /**
@@ -36,6 +37,22 @@ export function isWebGPUAvailable(): boolean {
 }
 
 /**
+ * Gibt die letzte Fehlermeldung zurück.
+ */
+export function getLastError(): string | null {
+  return lastError;
+}
+
+/**
+ * Setzt den Engine-Status zurück für Retry.
+ */
+export function resetEngine(): void {
+  engine = null;
+  modelLoading = false;
+  lastError = null;
+}
+
+/**
  * Initialisiert das KI-Modell asynchron.
  * @param onProgress - Callback für Lade-Fortschritt
  * @returns true wenn erfolgreich, false bei Fehler
@@ -43,10 +60,23 @@ export function isWebGPUAvailable(): boolean {
 export async function initModel(
   onProgress?: (progress: AIProgress) => void,
 ): Promise<boolean> {
-  if (generatorPipeline !== null) return true;
+  if (engine !== null) return true;
   if (modelLoading) return false;
 
+  // Prüfe WebGPU-Verfügbarkeit
+  if (!isWebGPUAvailable()) {
+    lastError = 'WebGPU ist in diesem Browser nicht verfügbar. Bitte verwenden Sie Chrome oder Edge in der neuesten Version.';
+    console.warn(lastError);
+    onProgress?.({
+      status: 'error',
+      message: lastError,
+      percent: 0,
+    });
+    return false;
+  }
+
   modelLoading = true;
+  lastError = null;
   onProgress?.({
     status: 'loading_model',
     message: 'KI-Modell wird initialisiert...',
@@ -54,18 +84,14 @@ export async function initModel(
   });
 
   try {
-    generatorPipeline = await pipeline('text2text-generation', MODEL_NAME, {
-      quantized: true,
-      revision: 'main',
-      progress_callback: (progress: any) => {
-        if (progress.status === 'progress') {
-          const percent = Math.round(progress.progress * 100);
-          onProgress?.({
-            status: 'loading_model',
-            message: `Modell wird geladen... ${percent}%`,
-            percent: 5 + percent * 0.9,
-          });
-        }
+    engine = await CreateMLCEngine(MODEL_NAME, {
+      initProgressCallback: (progress: { progress: number; text: string }) => {
+        const percent = Math.round(progress.progress * 100);
+        onProgress?.({
+          status: 'loading_model',
+          message: progress.text || `Modell wird geladen... ${percent}%`,
+          percent: 5 + percent * 0.9,
+        });
       },
     });
 
@@ -77,10 +103,11 @@ export async function initModel(
     modelLoading = false;
     return true;
   } catch (error) {
+    lastError = error instanceof Error ? error.message : 'Unbekannter Fehler beim Laden des KI-Modells';
     console.error('Fehler beim Laden des KI-Modells:', error);
     onProgress?.({
       status: 'error',
-      message: 'Fehler beim Laden des KI-Modells. Fallback wird genutzt.',
+      message: lastError,
       percent: 0,
     });
     modelLoading = false;
@@ -123,14 +150,36 @@ Zeit: ${prefs.availableTime} Minuten pro Tag
 Intensität: ${intensity}
 Equipment: ${prefs.equipment.join(', ')}
 
-Gib den Plan im folgenden Format aus:
-Tag: [Wochentag]
-Titel: [Name des Trainings]
-Dauer: [XX] Minuten
-Intensität: [leicht/mittel/hart]
-Übungen:
-1. [Name] - [Sets] Sets x [Reps] Reps
-2. [Name] - [Sets] Sets x [Reps] Reps`;
+Gib den Plan als JSON aus mit dieser exakten Struktur:
+{
+  "quests": [
+    {
+      "day": "Montag",
+      "dayIndex": 0,
+      "title": "Name des Trainings",
+      "description": "Beschreibung des Trainings",
+      "exercises": [
+        {
+          "name": "Übungsname",
+          "sets": 3,
+          "reps": "8-12",
+          "restSeconds": 60,
+          "muscleGroup": "Muskelgruppe"
+        }
+      ],
+      "duration": 45,
+      "intensity": "medium",
+      "equipment": ["Equipment1"]
+    }
+  ]
+}
+
+Wichtig:
+- Erstelle genau ${days} Quests (eine pro Tag: Montag${days > 5 ? ' bis Sonntag' : ' bis Freitag'})
+- Intensität muss "light", "medium" oder "hard" sein
+- Dauer sollte ca. ${prefs.availableTime} Minuten betragen
+- Nutze nur das angegebene Equipment
+- Antworte NUR mit dem JSON, keine zusätzlichen Erklärungen`;
 }
 
 /**
@@ -139,92 +188,39 @@ Intensität: [leicht/mittel/hart]
  */
 function parseAIOutput(output: string, prefs: UserPreferences): WeeklyPlan | null {
   try {
+    // Extrahiere JSON aus der Antwort (falls das Modell Markdown-Codeblöcke verwendet)
+    const jsonMatch = output.match(/```(?:json)?\s*([\s\S]*?)\s*```/) || output.match(/(\{[\s\S]*\})/);
+    const jsonStr = jsonMatch ? jsonMatch[1] : output;
+
+    const parsed = JSON.parse(jsonStr);
+
+    if (!parsed.quests || !Array.isArray(parsed.quests)) {
+      return null;
+    }
+
     const days = prefs.includeWeekend ? 7 : 5;
-    const quests: Quest[] = [];
-    const lines = output.split('\n').filter((l) => l.trim());
+    const quests: Quest[] = parsed.quests.slice(0, days).map((q: any, index: number) => ({
+      day: q.day || DAYS[index],
+      dayIndex: q.dayIndex ?? index,
+      title: q.title || `Training ${index + 1}`,
+      description: q.description || `KI-generiertes Training für ${prefs.fitnessGoal}`,
+      exercises: (q.exercises || []).map((ex: any) => ({
+        name: ex.name || 'Unbekannte Übung',
+        sets: ex.sets || 3,
+        reps: ex.reps || '8-12',
+        restSeconds: ex.restSeconds || 60,
+        muscleGroup: ex.muscleGroup || 'Allgemein',
+      })),
+      duration: q.duration || prefs.availableTime,
+      intensity: (q.intensity || determineIntensity(prefs.intensity)) as IntensityLevel,
+      equipment: q.equipment || [...prefs.equipment],
+      completed: false,
+    }));
 
-    let currentQuest: Partial<Quest> | null = null;
-    let currentExercises: Exercise[] = [];
-    let dayCounter = 0;
-
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.length < 2) continue;
-
-      // Neuer Tag erkannt
-      if (/^Tag\s*[:.\s]/i.test(trimmed) && dayCounter < days) {
-        if (currentQuest && currentExercises.length > 0) {
-          quests.push(finalizeQuest(currentQuest, currentExercises, dayCounter, prefs));
-          dayCounter++;
-        }
-        const titleMatch = trimmed.match(/Tag\s*[:.\s]*(.+)/i);
-        currentQuest = {
-          title: titleMatch?.[1]?.trim() || `Training ${dayCounter + 1}`,
-        };
-        currentExercises = [];
-        continue;
-      }
-
-      // Wochentag erkannt (Montag, Dienstag, etc.)
-      if (/^(Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)\s*[:.\s]/i.test(trimmed)) {
-        if (currentQuest && currentExercises.length > 0 && dayCounter < days) {
-          quests.push(finalizeQuest(currentQuest, currentExercises, dayCounter, prefs));
-          dayCounter++;
-        }
-        const titleMatch = trimmed.match(/^(?:Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)\s*[:.\s]*(.+)/i);
-        currentQuest = {
-          title: titleMatch?.[1]?.trim() || `Training ${dayCounter + 1}`,
-        };
-        currentExercises = [];
-        continue;
-      }
-
-      // Übung erkannt (verschiedene Formate)
-      const exerciseMatch = trimmed.match(/^[\d\-\*\.]+\s*([^:-]+)(?::\s*|-\s*)(\d+)\s*(?:Sets?)?\s*[x*]\s*([^\n]+)/i);
-      if (exerciseMatch && currentQuest) {
-        const [, name, setsStr, repsStr] = exerciseMatch;
-        currentExercises.push({
-          name: name.trim(),
-          sets: parseInt(setsStr, 10) || 3,
-          reps: repsStr.trim(),
-          restSeconds: 60,
-          muscleGroup: 'Allgemein',
-        });
-        continue;
-      }
-
-      // Dauer erkannt
-      const durationMatch = trimmed.match(/Dauer[:\s]*(\d+)\s*Min/i);
-      if (durationMatch && currentQuest) {
-        currentQuest.duration = parseInt(durationMatch[1], 10);
-      }
-
-      // Intensität erkannt
-      const intensityMatch = trimmed.match(/Intensität[:\s]*(leicht|mittel|hart)/i);
-      if (intensityMatch && currentQuest) {
-        currentQuest.intensity = intensityMatch[1].toLowerCase() as IntensityLevel;
-      }
-
-      // Titel erkannt
-      const titleMatch = trimmed.match(/Titel[:\s]*(.+)/i);
-      if (titleMatch && currentQuest) {
-        currentQuest.title = titleMatch[1].trim();
-      }
+    // Fülle fehlende Tage auf
+    while (quests.length < days) {
+      quests.push(createFallbackQuest(quests.length, prefs));
     }
-
-    // Letzten Tag abschließen
-    if (currentQuest && currentExercises.length > 0 && dayCounter < days) {
-      quests.push(finalizeQuest(currentQuest, currentExercises, dayCounter, prefs));
-      dayCounter++;
-    }
-
-    // Fülle fehlende Tage mit Fallback
-    while (dayCounter < days) {
-      quests.push(createFallbackQuest(dayCounter, prefs));
-      dayCounter++;
-    }
-
-    if (quests.length === 0) return null;
 
     return {
       weekNumber: 1,
@@ -236,29 +232,6 @@ function parseAIOutput(output: string, prefs: UserPreferences): WeeklyPlan | nul
     console.error('Fehler beim Parsen der KI-Ausgabe:', error);
     return null;
   }
-}
-
-/**
- * Finalisiert einen Quest-Eintrag aus geparsten Daten.
- */
-function finalizeQuest(
-  partial: Partial<Quest>,
-  exercises: Exercise[],
-  dayIndex: number,
-  prefs: UserPreferences,
-): Quest {
-  const intensity = partial.intensity || determineIntensity(prefs.intensity);
-  return {
-    day: DAYS[dayIndex],
-    dayIndex,
-    title: partial.title || `Training ${dayIndex + 1}`,
-    description: `KI-generiertes Training für ${prefs.fitnessGoal}`,
-    exercises,
-    duration: partial.duration || prefs.availableTime,
-    intensity,
-    equipment: [...prefs.equipment],
-    completed: false,
-  };
 }
 
 /**
@@ -287,7 +260,7 @@ function createFallbackQuest(dayIndex: number, prefs: UserPreferences): Quest {
 }
 
 /**
- * Erstellt einen Prompt-basierten Plan ohne KI (Fallback-Algorithmus).
+ * Erstellt einen algorithmischen Plan als Fallback.
  * Nutzt komplexere Logik als reines Random.
  */
 function createAlgorithmicPlan(prefs: UserPreferences): WeeklyPlan {
@@ -388,8 +361,23 @@ export async function generatePlanWithAI(
   prefs: UserPreferences,
   onProgress?: (progress: AIProgress) => void,
 ): Promise<AIGenerationResult> {
+  // Versuche KI-Modell zu laden falls noch nicht geladen
+  if (engine === null && !modelLoading) {
+    const loaded = await initModel(onProgress);
+    if (!loaded) {
+      // Fallback: Algorithmische Generierung
+      onProgress?.({
+        status: 'ready',
+        message: 'Plan mit lokalem Algorithmus erstellt.',
+        percent: 100,
+      });
+      const plan = createAlgorithmicPlan(prefs);
+      return { plan, generatedBy: 'template' };
+    }
+  }
+
   // Versuche KI-Generierung wenn Modell geladen
-  if (generatorPipeline !== null) {
+  if (engine !== null) {
     onProgress?.({
       status: 'generating',
       message: 'Trainingsplan wird generiert...',
@@ -398,15 +386,25 @@ export async function generatePlanWithAI(
 
     try {
       const prompt = buildPrompt(prefs);
-      const result = await generatorPipeline(prompt, {
-        max_new_tokens: 512,
+
+      const messages = [
+        {
+          role: 'system' as const,
+          content: 'Du bist ein professioneller Fitness-Trainer. Erstelle personalisierte Trainingspläne im JSON-Format. Antworte NUR mit gültigem JSON, keine zusätzlichen Erklärungen.',
+        },
+        {
+          role: 'user' as const,
+          content: prompt,
+        },
+      ];
+
+      const reply = await engine.chat.completions.create({
+        messages,
         temperature: 0.7,
-        do_sample: true,
+        max_tokens: 2048,
       });
 
-      const generatedText = Array.isArray(result)
-        ? result[0].generated_text
-        : result.generated_text;
+      const generatedText = reply.choices[0].message.content || '';
 
       onProgress?.({
         status: 'generating',
