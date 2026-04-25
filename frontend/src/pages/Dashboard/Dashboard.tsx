@@ -124,6 +124,7 @@ const Dashboard: React.FC = () => {
               <span className="level-number" style={{ color: 'var(--error)' }}>!</span>
               <span className="level-label">Locked</span>
             </div>
+          </div>
           <h1 className="dashboard-title">System Access Denied</h1>
           <p className="dashboard-subtitle">You must be logged in to view your adventurer dashboard.</p>
         </section>
@@ -183,6 +184,7 @@ const Dashboard: React.FC = () => {
                 <span className={`quest-tag-intensity ${intensityClass}`}>{dailyQuest.intensity}</span>
                 <span className="quest-duration">{dailyQuest.duration} min</span>
               </div>
+            </div>
             <p className="daily-quest-description">{dailyQuest.description}</p>
             <div className="daily-quest-checklist">
               {dailyQuest.exercises.map((ex, i) => (
@@ -219,6 +221,7 @@ const Dashboard: React.FC = () => {
                 </svg>
               </Link>
             </div>
+          </div>
         </section>
       )}
     </div>
@@ -354,6 +357,7 @@ const StatPieChart: React.FC<{
           <div className="stat-pie-hover-label">
             {segments[hoveredSegment].label}
           </div>
+        </div>
       )}
     </div>
   );
