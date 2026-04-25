@@ -6,7 +6,7 @@
 
 import React, { useState, useCallback } from 'react';
 import type { UserPreferences } from '../../QuestGenerator.types';
-import { savePreferences } from '../../services/QuestGeneratorService';
+import { savePreferences } from '../../../../services/QuestGeneratorService';
 import './PreferenceForm.css';
 
 /**

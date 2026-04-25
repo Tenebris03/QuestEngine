@@ -1,21 +1,12 @@
-# Quest Generator - Implementierungsplan
+# Phase 1: React Paradigm Fixes
 
-## Ziel
-QuestGenerator-Page mit echter lokaler KI (Transformers.js), tabellarischer Wochenübersicht und Design-Konsistenz zu Home.
+## Tasks
+- [x] 1. Move services to global `src/services/`
+- [x] 2. Fix QuestCard accessibility (keyboard handling)
+- [x] 3. Remove broken `/dashboard` link from Header
+- [x] 4. Create `src/hooks/useQuestGenerator.ts` and refactor QuestGenerator.tsx
+- [ ] 5. Verify build and lint pass
 
-## Schritte
-
-- [ ] 1. `package.json` erweitern (`@xenova/transformers`)
-- [ ] 2. `QuestGenerator.types.ts` erweitern (AI-Status, Modell-Info)
-- [ ] 3. `LocalAIService.ts` erstellen (Transformers.js Integration, Prompt-Builder, Parser)
-- [ ] 4. `useQuestAI.ts` Hook erstellen (React-Integration für KI)
-- [ ] 5. `AILoadingPanel` Komponente erstellen (Modell-Download & Generierung-Fortschritt)
-- [ ] 6. `WeeklyTable` Komponente erstellen (HTML table, responsive, barrierefrei)
-- [ ] 7. `QuestGeneratorService.ts` anpassen (KI + Template-Fallback)
-- [ ] 8. `WeeklyOverview.tsx` anpassen (WeeklyTable integrieren)
-- [ ] 9. `QuestGenerator.tsx` anpassen (KI-Loading-States, Hardware-Check)
-- [ ] 10. `QuestGenerator.css` anpassen (Hero-Gradient wie Home)
-- [ ] 11. CSS für neue Komponenten erstellen
-- [ ] 12. `npm install` ausführen
-- [ ] 13. `npm run lint` prüfen
-- [ ] 14. `npm run build` prüfen
+## Notes
+- Dashboard route is planned but not implemented yet
+- Services should be global per user confirmation

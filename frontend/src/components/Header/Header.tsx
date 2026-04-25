@@ -20,7 +20,6 @@ const Header: React.FC = () => {
       <nav className="header-nav" aria-label="Hauptnavigation">
         <Link to="/" className="nav-link">Home</Link>
         <Link to="/quest-generator" className="nav-link">Quest Generator</Link>
-        <Link to="/dashboard" className="nav-link">Dashboard</Link>
         <Link to="/about" className="nav-link">About</Link>
 
       </nav>

@@ -24,7 +24,19 @@ const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
 
   return (
     <article className={`quest-card ${intensityClass}`}>
-      <div className="quest-header" onClick={() => setExpanded(!expanded)} role="button" tabIndex={0} aria-expanded={expanded}>
+      <div
+        className="quest-header"
+        onClick={() => setExpanded(!expanded)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setExpanded(!expanded);
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-expanded={expanded}
+      >
         <div className="quest-day">{quest.day}</div>
         <h4 className="quest-title">{quest.title}</h4>
         <div className="quest-meta">
