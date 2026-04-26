@@ -1,8 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '../../components/Card/Card';
 import './Home.css';
 
 const Home: React.FC = () => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [isRed, setIsRed] = useState(false);
+  const [phase, setPhase] = useState<'typing1' | 'pause1' | 'shake' | 'deleting' | 'typing2'>('typing1');
+
+  const text1 = 'Netflix and Chill?';
+  const text2 = 'Level Up Your Life.';
+  const typingSpeed = 80;
+  const deletingSpeed = 35;
+  const pauseDuration = 600;
+  const shakeDuration = 600;
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+
+    if (phase === 'typing1') {
+      if (displayedText.length < text1.length) {
+        timer = setTimeout(() => {
+          setDisplayedText(text1.slice(0, displayedText.length + 1));
+        }, typingSpeed);
+      } else {
+        setPhase('pause1');
+      }
+    } else if (phase === 'pause1') {
+      timer = setTimeout(() => {
+        setIsRed(true);
+        setPhase('shake');
+      }, pauseDuration);
+    } else if (phase === 'shake') {
+      timer = setTimeout(() => {
+        setPhase('deleting');
+      }, shakeDuration);
+    } else if (phase === 'deleting') {
+      if (displayedText.length > 0) {
+        timer = setTimeout(() => {
+          setDisplayedText(displayedText.slice(0, -1));
+        }, deletingSpeed);
+      } else {
+        setIsRed(false);
+        setPhase('typing2');
+      }
+    } else if (phase === 'typing2') {
+      if (displayedText.length < text2.length) {
+        timer = setTimeout(() => {
+          setDisplayedText(text2.slice(0, displayedText.length + 1));
+        }, typingSpeed);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayedText, phase]);
+
   return (
     <div className="home-container">
       
@@ -12,7 +63,7 @@ const Home: React.FC = () => {
           <span className="badge-dot" />
           System Initialized
         </div>
-        <h1 className="hero-title">Level Up Your Life.</h1>
+        <h1 className={`hero-title ${isRed ? 'is-red' : ''}`}>{displayedText}</h1>
         <p className="hero-subtitle">
           Das System hat dich ausgewählt. Erledige Quests in der realen Welt,
           steigere deine Stats und brich deine Limits.
@@ -71,3 +122,4 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
