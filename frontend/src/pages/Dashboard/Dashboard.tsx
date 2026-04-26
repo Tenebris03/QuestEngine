@@ -149,18 +149,68 @@ const Dashboard: React.FC = () => {
   return (
     <div className="dashboard-container">
       <section className="dashboard-hero">
+        <div className="level-badge-wrapper">
+          <svg className="xp-ring" width="96" height="96" viewBox="0 0 96 96">
+            <circle className="xp-ring-bg" cx="48" cy="48" r="44" />
+            <circle
+              className="xp-ring-fill"
+              cx="48"
+              cy="48"
+              r="44"
+              stroke="url(#xpGradient)"
+              strokeDasharray={2 * Math.PI * 44}
+              strokeDashoffset={2 * Math.PI * 44 * (1 - xpPercent / 100)}
+            />
+            <defs>
+              <linearGradient id="xpGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#06b6d4" />
+                <stop offset="100%" stopColor="#8b5cf6" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div className="level-badge">
+            <span className="level-number">{user.level}</span>
+            <span className="level-label">{t('dashboard.stats.level')}</span>
+          </div>
+        </div>
+
         <h1 className="dashboard-title">{user.name}</h1>
-        
-        <StatPieChart 
-          level={user.level} 
-          stats={user.stats} 
-          maxStat={maxStat}
-          xpPercent={xpPercent}
-        />
 
         <div className="xp-text">
           <span>{t('dashboard.stats.xp', { current: user.experience, max: user.maxExperience })}</span>
           <span className="xp-percent">{t('dashboard.stats.xpPercent', { percent: xpPercent })}</span>
+        </div>
+
+        <div className="stats-row">
+          {STATS_CONFIG.map((stat) => {
+            const value = user.stats[stat.key];
+            const percent = Math.round((value / maxStat) * 100);
+            return (
+              <div
+                key={stat.key}
+                className="stat-pill"
+                style={
+                  {
+                    '--stat-color': stat.color,
+                    '--stat-glow': stat.glow,
+                  } as React.CSSProperties
+                }
+              >
+                <div className="stat-pill-icon">{stat.icon}</div>
+                <div className="stat-pill-value">{value}</div>
+                <div className="stat-pill-label">{stat.label}</div>
+                <div className="stat-pill-bar-bg">
+                  <div
+                    className="stat-pill-bar-fill"
+                    style={{
+                      width: `${percent}%`,
+                      background: stat.color,
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -214,142 +264,6 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </section>
-      )}
-    </div>
-  );
-};
-
-const StatPieChart: React.FC<{
-  level: number;
-  stats: UserStats;
-  maxStat: number;
-  xpPercent: number;
-}> = ({ level, stats, maxStat, xpPercent }) => {
-  const { t } = useTranslation();
-  const [hoveredSegment, setHoveredSegment] = useState<number | null>(null);
-
-  const size = 180;
-  const center = size / 2;
-  const outerRadius = size / 2 - 4;
-  const innerRadius = outerRadius * 0.62;
-  const labelRadius = (outerRadius + innerRadius) / 2;
-
-  const segments = STATS_CONFIG.map((stat, index) => {
-    const startAngle = (index * 90 - 45) * (Math.PI / 180);
-    const endAngle = ((index + 1) * 90 - 45) * (Math.PI / 180);
-    const midAngle = (startAngle + endAngle) / 2;
-
-    const x1 = center + outerRadius * Math.cos(startAngle);
-    const y1 = center + outerRadius * Math.sin(startAngle);
-    const x2 = center + outerRadius * Math.cos(endAngle);
-    const y2 = center + outerRadius * Math.sin(endAngle);
-    const x3 = center + innerRadius * Math.cos(endAngle);
-    const y3 = center + innerRadius * Math.sin(endAngle);
-    const x4 = center + innerRadius * Math.cos(startAngle);
-    const y4 = center + innerRadius * Math.sin(startAngle);
-
-    const lx = center + labelRadius * Math.cos(midAngle);
-    const ly = center + labelRadius * Math.sin(midAngle);
-
-    const value = stats[stat.key];
-    const relativePercent = Math.round((value / maxStat) * 100);
-
-    return {
-      ...stat,
-      path: `M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 0 0 ${x4} ${y4} Z`,
-      labelX: lx,
-      labelY: ly,
-      value,
-      relativePercent,
-    };
-  });
-
-  const circumference = 2 * Math.PI * (innerRadius - 4);
-  const strokeDashoffset = circumference - (xpPercent / 100) * circumference;
-
-  return (
-    <div 
-      className="stat-pie-chart"
-      style={{ width: size, height: size }}
-    >
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        {segments.map((seg, i) => (
-          <path
-            key={seg.key}
-            d={seg.path}
-            fill={seg.color}
-            opacity={hoveredSegment === i ? 1 : 0.7}
-            stroke="var(--bg-primary)"
-            strokeWidth="2"
-            style={{ 
-              transition: 'opacity 0.3s ease, transform 0.3s ease',
-              cursor: 'pointer',
-              transformOrigin: `${center}px ${center}px`,
-              transform: hoveredSegment === i ? 'scale(1.04)' : 'scale(1)',
-            }}
-            onMouseEnter={() => setHoveredSegment(i)}
-            onMouseLeave={() => setHoveredSegment(null)}
-          />
-        ))}
-        
-        {/* Inner circle background */}
-        <circle cx={center} cy={center} r={innerRadius - 2} fill="var(--bg-primary)" />
-        
-        {/* Inner XP ring */}
-        <circle
-          cx={center}
-          cy={center}
-          r={innerRadius - 6}
-          fill="none"
-          stroke="var(--glass-border)"
-          strokeWidth="3"
-        />
-        <circle
-          cx={center}
-          cy={center}
-          r={innerRadius - 6}
-          fill="none"
-          stroke="url(#xpGradientPie)"
-          strokeWidth="3"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-          transform={`rotate(-90 ${center} ${center})`}
-          style={{ transition: 'stroke-dashoffset 0.5s ease' }}
-        />
-        
-        <defs>
-          <linearGradient id="xpGradientPie" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#06b6d4" />
-            <stop offset="100%" stopColor="#8b5cf6" />
-          </linearGradient>
-        </defs>
-      </svg>
-
-      {/* Center content - always visible level */}
-      <div className="stat-pie-center">
-        <span className="stat-pie-level">{level}</span>
-        <span className="stat-pie-level-label">{t('dashboard.stats.level')}</span>
-      </div>
-
-      {/* Hover overlay */}
-      {hoveredSegment !== null && (
-        <div 
-          className="stat-pie-hover"
-          style={{ 
-            animation: 'fadeScaleIn 0.25s ease',
-          }}
-        >
-          <div className="stat-pie-hover-icon" style={{ color: segments[hoveredSegment].color }}>
-            {segments[hoveredSegment].icon}
-          </div>
-          <div className="stat-pie-hover-value" style={{ color: segments[hoveredSegment].color }}>
-            {segments[hoveredSegment].value}
-          </div>
-          <div className="stat-pie-hover-label">
-            {segments[hoveredSegment].label}
-          </div>
-        </div>
       )}
     </div>
   );
