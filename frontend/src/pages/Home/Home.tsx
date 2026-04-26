@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Card from '../../components/Card/Card';
 import './Home.css';
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
   const [displayedText, setDisplayedText] = useState('');
   const [isRed, setIsRed] = useState(false);
   const [phase, setPhase] = useState<'typing1' | 'pause1' | 'shake' | 'deleting' | 'typing2'>('typing1');
 
-  const text1 = 'Netflix and Chill?';
-  const text2 = 'Level Up Your Life.';
+  const text1 = t('home.hero.title1');
+  const text2 = t('home.hero.title2');
   const typingSpeed = 80;
   const deletingSpeed = 35;
   const pauseDuration = 600;
@@ -52,7 +54,7 @@ const Home: React.FC = () => {
     }
 
     return () => clearTimeout(timer);
-  }, [displayedText, phase]);
+  }, [displayedText, phase, text1, text2]);
 
   return (
     <div className="home-container">
@@ -61,15 +63,14 @@ const Home: React.FC = () => {
       <section className="hero-section">
         <div className="hero-badge">
           <span className="badge-dot" />
-          System Initialized
+          {t('home.hero.badge')}
         </div>
         <h1 className={`hero-title ${isRed ? 'is-red' : ''}`}>{displayedText}</h1>
         <p className="hero-subtitle">
-          Das System hat dich ausgewählt. Erledige Quests in der realen Welt,
-          steigere deine Stats und brich deine Limits.
+          {t('home.hero.subtitle')}
         </p>
         <button className="cta-button">
-          <span>System beitreten</span>
+          <span>{t('home.hero.cta')}</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -80,27 +81,27 @@ const Home: React.FC = () => {
 
       {/* Feature Section mit Quest-Beispielen */}
       <section>
-        <h2 className="section-title">Verfügbare Quest-Typen</h2>
+        <h2 className="section-title">{t('home.features.title')}</h2>
         <div className="features-grid">
           <Card
-            title="Tägliche Quests"
-            description="Wiederholbare Aufgaben, die dein Fundament stärken. Ignorieren führt zu Strafen."
+            title={t('home.features.daily.title')}
+            description={t('home.features.daily.description')}
           >
-            <div className="quest-tag tag-daily">Daily: 100 Liegestütze</div>
+            <div className="quest-tag tag-daily">{t('home.features.daily.tag')}</div>
           </Card>
 
           <Card
-            title="Attribut-Aufstieg"
-            description="Spezifische Herausforderungen, die deine Kraft, Agilität oder Intelligenz dauerhaft erhöhen."
+            title={t('home.features.attribute.title')}
+            description={t('home.features.attribute.description')}
           >
-            <div className="quest-tag tag-side">+5 STR Points</div>
+            <div className="quest-tag tag-side">{t('home.features.attribute.tag')}</div>
           </Card>
 
           <Card
-            title="Penalty System"
-            description="Wer die Regeln des Systems bricht, muss sich der Strafe stellen. Scheitern ist keine Option."
+            title={t('home.features.penalty.title')}
+            description={t('home.features.penalty.description')}
           >
-            <div className="quest-tag tag-penalty">Status: Emergency</div>
+            <div className="quest-tag tag-penalty">{t('home.features.penalty.tag')}</div>
           </Card>
         </div>
       </section>
@@ -109,9 +110,9 @@ const Home: React.FC = () => {
 
       {/* Stat Preview Section */}
       <section className="cta-section">
-        <h3>Bist du bereit für den ersten Rank-Up?</h3>
+        <h3>{t('home.cta.title')}</h3>
         <button className="cta-button" style={{ marginTop: 0 }}>
-          <span>Jetzt starten</span>
+          <span>{t('home.cta.button')}</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>

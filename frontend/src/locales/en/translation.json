@@ -1,0 +1,292 @@
+{
+  "header": {
+    "logoAlt": "QuestEngine Logo",
+    "nav": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "questGenerator": "Quest Generator"
+    },
+    "aria": {
+      "mainNav": "Main navigation",
+      "openSettings": "Open settings",
+      "logout": "Logout"
+    },
+    "user": {
+      "logout": "Logout",
+      "login": "Login",
+      "register": "Register"
+    },
+    "language": {
+      "label": "Language",
+      "en": "English",
+      "de": "German"
+    }
+  },
+  "footer": {
+    "links": {
+      "home": "Home",
+      "questGenerator": "Quest Generator",
+      "about": "About"
+    },
+    "copyright": "© {{year}} QuestEngine. All rights reserved. Built with React & Vite."
+  },
+  "home": {
+    "hero": {
+      "badge": "System Initialized",
+      "title1": "Netflix and Chill?",
+      "title2": "Level Up Your Life.",
+      "subtitle": "The system has chosen you. Complete quests in the real world, increase your stats and break your limits.",
+      "cta": "Join the System"
+    },
+    "features": {
+      "title": "Available Quest Types",
+      "daily": {
+        "title": "Daily Quests",
+        "description": "Repeatable tasks that strengthen your foundation. Ignoring them leads to penalties.",
+        "tag": "Daily: 100 Push-ups"
+      },
+      "attribute": {
+        "title": "Attribute Upgrade",
+        "description": "Specific challenges that permanently increase your strength, agility or intelligence.",
+        "tag": "+5 STR Points"
+      },
+      "penalty": {
+        "title": "Penalty System",
+        "description": "Those who break the rules of the system must face the penalty. Failure is not an option.",
+        "tag": "Status: Emergency"
+      }
+    },
+    "cta": {
+      "title": "Ready for your first Rank-Up?",
+      "button": "Start Now"
+    }
+  },
+  "dashboard": {
+    "locked": {
+      "badge": "Locked",
+      "title": "System Access Denied",
+      "subtitle": "You must be logged in to view your adventurer dashboard.",
+      "authRequired": "Authentication Required",
+      "authDescription": "Your stats, quests, and progress are protected. Log in to access your personal dashboard.",
+      "loginButton": "Login to System"
+    },
+    "stats": {
+      "strength": {
+        "label": "STR",
+        "description": "Physical power and melee damage."
+      },
+      "agility": {
+        "label": "AGI",
+        "description": "Speed, dodge chance, and reflexes."
+      },
+      "intelligence": {
+        "label": "INT",
+        "description": "Magic damage and skill learning."
+      },
+      "vitality": {
+        "label": "VIT",
+        "description": "Health points and endurance."
+      },
+      "level": "LVL",
+      "xp": "{{current}} / {{max}} XP",
+      "xpPercent": "{{percent}}%"
+    },
+    "dailyQuest": {
+      "title": "Daily Quest",
+      "empty": {
+        "description": "No quest generated for today yet.",
+        "button": "Generate Quests"
+      },
+      "completed": "Quest Complete! +XP earned!",
+      "intensity": "Intensity",
+      "duration": "{{minutes}} min",
+      "exercise": {
+        "setsRepsRest": "{{sets}} x {{reps}} · {{rest}}s rest"
+      }
+    }
+  },
+  "login": {
+    "title": "System Login",
+    "subtitle": "Enter your credentials to access the system.",
+    "form": {
+      "username": {
+        "label": "Username",
+        "placeholder": "Enter your username"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      },
+      "submit": "Login",
+      "errors": {
+        "usernameRequired": "Username is required.",
+        "usernameMinLength": "Username must be at least 3 characters.",
+        "passwordRequired": "Password is required.",
+        "passwordMinLength": "Password must be at least 6 characters.",
+        "invalidCredentials": "Invalid username or password."
+      }
+    },
+    "footer": "No account yet? <0>Register here</0>"
+  },
+  "register": {
+    "title": "Join the System",
+    "subtitle": "Create your account to begin your journey.",
+    "success": "Registration successful! Redirecting to login...",
+    "form": {
+      "username": {
+        "label": "Username",
+        "placeholder": "Choose a username"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "your@email.com"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Create a password"
+      },
+      "confirmPassword": {
+        "label": "Confirm Password",
+        "placeholder": "Repeat your password"
+      },
+      "submit": "Register",
+      "errors": {
+        "usernameRequired": "Username is required.",
+        "usernameMinLength": "Username must be at least 3 characters.",
+        "emailRequired": "Email is required.",
+        "emailInvalid": "Please enter a valid email address.",
+        "passwordRequired": "Password is required.",
+        "passwordMinLength": "Password must be at least 6 characters.",
+        "confirmRequired": "Please confirm your password.",
+        "passwordMismatch": "Passwords do not match."
+      }
+    },
+    "footer": "Already have an account? <0>Login here</0>"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your adventurer profile.",
+    "unauthenticated": {
+      "subtitle": "You must be logged in to customize your profile.",
+      "loginButton": "Login to System"
+    },
+    "form": {
+      "name": {
+        "label": "Adventurer Name",
+        "placeholder": "Enter your name"
+      },
+      "avatar": {
+        "label": "Profile Picture URL",
+        "placeholder": "https://example.com/avatar.png"
+      },
+      "language": {
+        "label": "Language",
+        "en": "English",
+        "de": "German"
+      },
+      "submit": "Save Changes"
+    }
+  },
+  "questGenerator": {
+    "title": "Quest Generator",
+    "subtitle": "Generate personalized fitness quests based on your goals and equipment.",
+    "webgpu": {
+      "warning": "WebGPU not available",
+      "description": "AI generation will not work. Please use Chrome or Edge in the latest version."
+    },
+    "progress": {
+      "generating": "Generating training plan...",
+      "regenerating": "Regenerating training plan..."
+    },
+    "error": {
+      "title": "Error",
+      "unexpected": "An unexpected error occurred.",
+      "retry": "Try Again"
+    },
+    "noPlan": {
+      "description": "No quests generated yet.",
+      "button": "Start Now"
+    },
+    "actions": {
+      "editPreferences": "Edit Preferences"
+    }
+  },
+  "preferenceForm": {
+    "title": "Set Quest Parameters",
+    "subtitle": "Define your goals for the optimal training plan.",
+    "fitnessGoal": {
+      "label": "Fitness Goal",
+      "options": {
+        "strength": "Strength Building",
+        "endurance": "Endurance",
+        "weightloss": "Weight Loss",
+        "muscle": "Muscle Building"
+      }
+    },
+    "availableTime": {
+      "label": "Available Time per Session",
+      "options": {
+        "30": "30 Minutes",
+        "45": "45 Minutes",
+        "60": "60 Minutes",
+        "90": "90 Minutes",
+        "120": "120 Minutes"
+      }
+    },
+    "experienceLevel": {
+      "label": "Experience Level",
+      "options": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Expert"
+      }
+    },
+    "intensity": {
+      "label": "Intensity",
+      "value": "{{value}}/10",
+      "min": "Light",
+      "max": "Extreme"
+    },
+    "equipment": {
+      "label": "Available Equipment",
+      "options": {
+        "none": "No Equipment (Bodyweight)",
+        "pullupBar": "Pull-up Bar",
+        "dumbbells": "Dumbbells",
+        "resistanceBands": "Resistance Bands",
+        "yogaMat": "Yoga Mat"
+      }
+    },
+    "weekend": {
+      "label": "Include Weekend"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "generate": "Generate Plan"
+    }
+  },
+  "weeklyOverview": {
+    "title": "Your Training Plan – Week {{week}}",
+    "stats": {
+      "quests": "{{count}} Quests",
+      "duration": "{{minutes}} Minutes",
+      "completed": "{{completed}}/{{total}} completed"
+    },
+    "regenerate": "Generate New Quests"
+  },
+  "questCard": {
+    "setsReps": "{{sets}} Sets × {{reps}} Reps",
+    "rest": "{{seconds}}s Rest",
+    "equipment": "Equipment: {{items}}"
+  },
+  "weekdays": {
+    "0": "Sunday",
+    "1": "Monday",
+    "2": "Tuesday",
+    "3": "Wednesday",
+    "4": "Thursday",
+    "5": "Friday",
+    "6": "Saturday"
+  }
+}
+

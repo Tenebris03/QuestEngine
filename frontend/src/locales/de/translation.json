@@ -1,0 +1,292 @@
+{
+  "header": {
+    "logoAlt": "QuestEngine Logo",
+    "nav": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "questGenerator": "Quest Generator"
+    },
+    "aria": {
+      "mainNav": "Hauptnavigation",
+      "openSettings": "Einstellungen öffnen",
+      "logout": "Abmelden"
+    },
+    "user": {
+      "logout": "Abmelden",
+      "login": "Anmelden",
+      "register": "Registrieren"
+    },
+    "language": {
+      "label": "Sprache",
+      "en": "Englisch",
+      "de": "Deutsch"
+    }
+  },
+  "footer": {
+    "links": {
+      "home": "Home",
+      "questGenerator": "Quest Generator",
+      "about": "Über uns"
+    },
+    "copyright": "© {{year}} QuestEngine. Alle Rechte vorbehalten. Gebaut mit React & Vite."
+  },
+  "home": {
+    "hero": {
+      "badge": "System Initialisiert",
+      "title1": "Netflix and Chill?",
+      "title2": "Level Up Your Life.",
+      "subtitle": "Das System hat dich ausgewählt. Erledige Quests in der realen Welt, steigere deine Stats und brich deine Limits.",
+      "cta": "System beitreten"
+    },
+    "features": {
+      "title": "Verfügbare Quest-Typen",
+      "daily": {
+        "title": "Tägliche Quests",
+        "description": "Wiederholbare Aufgaben, die dein Fundament stärken. Ignorieren führt zu Strafen.",
+        "tag": "Daily: 100 Liegestütze"
+      },
+      "attribute": {
+        "title": "Attribut-Aufstieg",
+        "description": "Spezifische Herausforderungen, die deine Kraft, Agilität oder Intelligenz dauerhaft erhöhen.",
+        "tag": "+5 STR Points"
+      },
+      "penalty": {
+        "title": "Penalty System",
+        "description": "Wer die Regeln des Systems bricht, muss sich der Strafe stellen. Scheitern ist keine Option.",
+        "tag": "Status: Emergency"
+      }
+    },
+    "cta": {
+      "title": "Bist du bereit für den ersten Rank-Up?",
+      "button": "Jetzt starten"
+    }
+  },
+  "dashboard": {
+    "locked": {
+      "badge": "Gesperrt",
+      "title": "Systemzugriff verweigert",
+      "subtitle": "Du musst angemeldet sein, um dein Abenteurer-Dashboard zu sehen.",
+      "authRequired": "Authentifizierung erforderlich",
+      "authDescription": "Deine Stats, Quests und Fortschritte sind geschützt. Melde dich an, um auf dein persönliches Dashboard zuzugreifen.",
+      "loginButton": "Zum Login"
+    },
+    "stats": {
+      "strength": {
+        "label": "STR",
+        "description": "Physische Kraft und Nahkampfschaden."
+      },
+      "agility": {
+        "label": "AGI",
+        "description": "Geschwindigkeit, Ausweichchance und Reflexe."
+      },
+      "intelligence": {
+        "label": "INT",
+        "description": "Magieschaden und Fertigkeitenlernen."
+      },
+      "vitality": {
+        "label": "VIT",
+        "description": "Gesundheitspunkte und Ausdauer."
+      },
+      "level": "LVL",
+      "xp": "{{current}} / {{max}} XP",
+      "xpPercent": "{{percent}}%"
+    },
+    "dailyQuest": {
+      "title": "Tägliche Quest",
+      "empty": {
+        "description": "Noch keine Quest für heute generiert.",
+        "button": "Quests generieren"
+      },
+      "completed": "Quest abgeschlossen! +XP verdient!",
+      "intensity": "Intensität",
+      "duration": "{{minutes}} min",
+      "exercise": {
+        "setsRepsRest": "{{sets}} x {{reps}} · {{rest}}s Pause"
+      }
+    }
+  },
+  "login": {
+    "title": "System Login",
+    "subtitle": "Gib deine Zugangsdaten ein, um auf das System zuzugreifen.",
+    "form": {
+      "username": {
+        "label": "Benutzername",
+        "placeholder": "Gib deinen Benutzernamen ein"
+      },
+      "password": {
+        "label": "Passwort",
+        "placeholder": "Gib dein Passwort ein"
+      },
+      "submit": "Anmelden",
+      "errors": {
+        "usernameRequired": "Benutzername ist erforderlich.",
+        "usernameMinLength": "Benutzername muss mindestens 3 Zeichen lang sein.",
+        "passwordRequired": "Passwort ist erforderlich.",
+        "passwordMinLength": "Passwort muss mindestens 6 Zeichen lang sein.",
+        "invalidCredentials": "Ungültiger Benutzername oder Passwort."
+      }
+    },
+    "footer": "Noch kein Konto? <0>Hier registrieren</0>"
+  },
+  "register": {
+    "title": "System beitreten",
+    "subtitle": "Erstelle dein Konto, um deine Reise zu beginnen.",
+    "success": "Registrierung erfolgreich! Weiterleitung zum Login...",
+    "form": {
+      "username": {
+        "label": "Benutzername",
+        "placeholder": "Wähle einen Benutzernamen"
+      },
+      "email": {
+        "label": "E-Mail",
+        "placeholder": "deine@email.com"
+      },
+      "password": {
+        "label": "Passwort",
+        "placeholder": "Erstelle ein Passwort"
+      },
+      "confirmPassword": {
+        "label": "Passwort bestätigen",
+        "placeholder": "Wiederhole dein Passwort"
+      },
+      "submit": "Registrieren",
+      "errors": {
+        "usernameRequired": "Benutzername ist erforderlich.",
+        "usernameMinLength": "Benutzername muss mindestens 3 Zeichen lang sein.",
+        "emailRequired": "E-Mail ist erforderlich.",
+        "emailInvalid": "Bitte gib eine gültige E-Mail-Adresse ein.",
+        "passwordRequired": "Passwort ist erforderlich.",
+        "passwordMinLength": "Passwort muss mindestens 6 Zeichen lang sein.",
+        "confirmRequired": "Bitte bestätige dein Passwort.",
+        "passwordMismatch": "Passwörter stimmen nicht überein."
+      }
+    },
+    "footer": "Bereits ein Konto? <0>Hier anmelden</0>"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "subtitle": "Passe dein Abenteurer-Profil an.",
+    "unauthenticated": {
+      "subtitle": "Du musst angemeldet sein, um dein Profil anzupassen.",
+      "loginButton": "Zum Login"
+    },
+    "form": {
+      "name": {
+        "label": "Abenteurer-Name",
+        "placeholder": "Gib deinen Namen ein"
+      },
+      "avatar": {
+        "label": "Profilbild-URL",
+        "placeholder": "https://example.com/avatar.png"
+      },
+      "language": {
+        "label": "Sprache",
+        "en": "Englisch",
+        "de": "Deutsch"
+      },
+      "submit": "Änderungen speichern"
+    }
+  },
+  "questGenerator": {
+    "title": "Quest Generator",
+    "subtitle": "Generiere personalisierte Fitness-Quests basierend auf deinen Zielen und Equipment.",
+    "webgpu": {
+      "warning": "WebGPU nicht verfügbar",
+      "description": "Die KI-Generierung wird nicht funktionieren. Bitte verwende Chrome oder Edge in der neuesten Version."
+    },
+    "progress": {
+      "generating": "Trainingsplan wird generiert...",
+      "regenerating": "Trainingsplan wird neu generiert..."
+    },
+    "error": {
+      "title": "Fehler",
+      "unexpected": "Ein unerwarteter Fehler ist aufgetreten.",
+      "retry": "Erneut versuchen"
+    },
+    "noPlan": {
+      "description": "Noch keine Quests generiert.",
+      "button": "Jetzt starten"
+    },
+    "actions": {
+      "editPreferences": "Preferences bearbeiten"
+    }
+  },
+  "preferenceForm": {
+    "title": "Quest-Parameter festlegen",
+    "subtitle": "Definiere deine Ziele für den optimalen Trainingsplan.",
+    "fitnessGoal": {
+      "label": "Fitness-Ziel",
+      "options": {
+        "strength": "Kraftaufbau",
+        "endurance": "Ausdauer",
+        "weightloss": "Gewichtsverlust",
+        "muscle": "Muskelaufbau"
+      }
+    },
+    "availableTime": {
+      "label": "Verfügbare Zeit pro Session",
+      "options": {
+        "30": "30 Minuten",
+        "45": "45 Minuten",
+        "60": "60 Minuten",
+        "90": "90 Minuten",
+        "120": "120 Minuten"
+      }
+    },
+    "experienceLevel": {
+      "label": "Erfahrungslevel",
+      "options": {
+        "beginner": "Anfänger",
+        "intermediate": "Fortgeschritten",
+        "advanced": "Experte"
+      }
+    },
+    "intensity": {
+      "label": "Intensität",
+      "value": "{{value}}/10",
+      "min": "Leicht",
+      "max": "Extrem"
+    },
+    "equipment": {
+      "label": "Verfügbares Equipment",
+      "options": {
+        "none": "Kein Equipment (Bodyweight)",
+        "pullupBar": "Klimmzugstange",
+        "dumbbells": "Hanteln",
+        "resistanceBands": "Resistance Bands",
+        "yogaMat": "Yoga-Matte"
+      }
+    },
+    "weekend": {
+      "label": "Wochenende inkludieren"
+    },
+    "buttons": {
+      "cancel": "Abbrechen",
+      "generate": "Plan generieren"
+    }
+  },
+  "weeklyOverview": {
+    "title": "Dein Trainingsplan – Woche {{week}}",
+    "stats": {
+      "quests": "{{count}} Quests",
+      "duration": "{{minutes}} Minuten",
+      "completed": "{{completed}}/{{total}} abgeschlossen"
+    },
+    "regenerate": "Neue Quests generieren"
+  },
+  "questCard": {
+    "setsReps": "{{sets}} Sets × {{reps}} Reps",
+    "rest": "{{seconds}}s Pause",
+    "equipment": "Equipment: {{items}}"
+  },
+  "weekdays": {
+    "0": "Sonntag",
+    "1": "Montag",
+    "2": "Dienstag",
+    "3": "Mittwoch",
+    "4": "Donnerstag",
+    "5": "Freitag",
+    "6": "Samstag"
+  }
+}
+

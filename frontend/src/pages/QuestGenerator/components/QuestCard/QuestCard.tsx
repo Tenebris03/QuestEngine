@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Quest } from '../../QuestGenerator.types';
 import './QuestCard.css';
 
@@ -18,6 +19,7 @@ interface QuestCardProps {
  * QuestCard zeigt die Details einer täglichen Quest an.
  */
 const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
 
   const intensityClass = `intensity-${quest.intensity}`;
@@ -54,16 +56,16 @@ const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
               <li key={index} className="exercise-item">
                 <span className="exercise-name">{exercise.name}</span>
                 <span className="exercise-stats">
-                  {exercise.sets} Sets × {exercise.reps} Reps
+                  {t('questCard.setsReps', { sets: exercise.sets, reps: exercise.reps })}
                 </span>
-                <span className="exercise-rest">{exercise.restSeconds}s Pause</span>
+                <span className="exercise-rest">{t('questCard.rest', { seconds: exercise.restSeconds })}</span>
               </li>
             ))}
           </ul>
 
           {quest.equipment.length > 0 && (
             <div className="quest-equipment">
-              <strong>Equipment:</strong> {quest.equipment.join(', ')}
+              <strong>{t('questCard.equipment', { items: quest.equipment.join(', ') })}</strong>
             </div>
           )}
         </div>

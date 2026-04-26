@@ -5,6 +5,7 @@
  */
 
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { UserPreferences, WeeklyPlan, AIProgress } from '../pages/QuestGenerator/QuestGenerator.types';
 import {
   loadPreferences,
@@ -41,6 +42,7 @@ export interface UseQuestGeneratorReturn {
  * Custom hook that manages all QuestGenerator state and side effects.
  */
 export function useQuestGenerator(): UseQuestGeneratorReturn {
+  const { t } = useTranslation();
   const [preferences, setPreferences] = useState<UserPreferences | null>(() =>
     hasPreferences() ? loadPreferences() : null,
   );
@@ -58,7 +60,7 @@ export function useQuestGenerator(): UseQuestGeneratorReturn {
     setModelError(null);
     setAiProgress({
       status: 'generating',
-      message: 'Trainingsplan wird generiert...',
+      message: t('questGenerator.progress.generating'),
       percent: 0,
     });
 
@@ -75,12 +77,12 @@ export function useQuestGenerator(): UseQuestGeneratorReturn {
       setShowForm(false);
     } catch (error) {
       console.error('Fehler bei der Generierung:', error);
-      setModelError('Ein unerwarteter Fehler ist aufgetreten.');
+      setModelError(t('questGenerator.error.unexpected'));
     } finally {
       setIsGenerating(false);
       setAiProgress(null);
     }
-  }, []);
+  }, [t]);
 
   const handleRegenerate = useCallback(async () => {
     if (preferences) {
@@ -88,7 +90,7 @@ export function useQuestGenerator(): UseQuestGeneratorReturn {
       setModelError(null);
       setAiProgress({
         status: 'generating',
-        message: 'Trainingsplan wird neu generiert...',
+        message: t('questGenerator.progress.regenerating'),
         percent: 0,
       });
 
@@ -104,13 +106,13 @@ export function useQuestGenerator(): UseQuestGeneratorReturn {
         saveWeeklyPlan(result.plan);
       } catch (error) {
         console.error('Fehler bei der Regenerierung:', error);
-        setModelError('Ein unerwarteter Fehler ist aufgetreten.');
+        setModelError(t('questGenerator.error.unexpected'));
       } finally {
         setIsGenerating(false);
         setAiProgress(null);
       }
     }
-  }, [preferences]);
+  }, [preferences, t]);
 
   const handleOpenForm = useCallback(() => {
     setShowForm(true);

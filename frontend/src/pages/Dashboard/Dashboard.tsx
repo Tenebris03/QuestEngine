@@ -1,73 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useUser, type UserStats } from '../../context/UserContext';
 import Card from '../../components/Card/Card';
 import { getTodaysQuest } from '../../services/QuestGeneratorService';
 import type { Quest, Exercise } from '../../pages/QuestGenerator/QuestGenerator.types';
 import './Dashboard.css';
 
-const WEEKDAYS = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
-
 interface StatConfig {
   key: keyof UserStats;
   label: string;
-  description: string;
   color: string;
   glow: string;
   icon: React.ReactNode;
 }
-
-const STATS_CONFIG: StatConfig[] = [
-  {
-    key: 'strength',
-    label: 'STR',
-    description: 'Physical power and melee damage.',
-    color: '#f97316',
-    glow: 'rgba(249, 115, 22, 0.25)',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M6 5v14"/><path d="M18 5v14"/><path d="M2 12h20"/>
-      </svg>
-    ),
-  },
-  {
-    key: 'agility',
-    label: 'AGI',
-    description: 'Speed, dodge chance, and reflexes.',
-    color: '#10b981',
-    glow: 'rgba(16, 185, 129, 0.25)',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-      </svg>
-    ),
-  },
-  {
-    key: 'intelligence',
-    label: 'INT',
-    description: 'Magic damage and skill learning.',
-    color: '#8b5cf6',
-    glow: 'rgba(139, 92, 246, 0.25)',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/>
-        <path d="M9 21h6"/>
-      </svg>
-    ),
-  },
-  {
-    key: 'vitality',
-    label: 'VIT',
-    description: 'Health points and endurance.',
-    color: '#06b6d4',
-    glow: 'rgba(6, 182, 212, 0.25)',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-      </svg>
-    ),
-  },
-];
 
 function getTodayStorageKey(): string {
   const today = new Date().toISOString().split('T')[0];
@@ -93,7 +39,56 @@ function saveCompletedExercises(state: boolean[]): void {
   localStorage.setItem(getTodayStorageKey(), JSON.stringify(state));
 }
 
+const STATS_CONFIG: StatConfig[] = [
+  {
+    key: 'strength',
+    label: 'STR',
+    color: '#f97316',
+    glow: 'rgba(249, 115, 22, 0.25)',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 5v14"/><path d="M18 5v14"/><path d="M2 12h20"/>
+      </svg>
+    ),
+  },
+  {
+    key: 'agility',
+    label: 'AGI',
+    color: '#10b981',
+    glow: 'rgba(16, 185, 129, 0.25)',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+      </svg>
+    ),
+  },
+  {
+    key: 'intelligence',
+    label: 'INT',
+    color: '#8b5cf6',
+    glow: 'rgba(139, 92, 246, 0.25)',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/>
+        <path d="M9 21h6"/>
+      </svg>
+    ),
+  },
+  {
+    key: 'vitality',
+    label: 'VIT',
+    color: '#06b6d4',
+    glow: 'rgba(6, 182, 212, 0.25)',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    ),
+  },
+];
+
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
   const { user, isAuthenticated } = useUser();
   const [dailyQuest, setDailyQuest] = useState<Quest | null>(null);
   const [completedExercises, setCompletedExercises] = useState<boolean[]>([]);
@@ -122,18 +117,18 @@ const Dashboard: React.FC = () => {
           <div className="level-badge-wrapper">
             <div className="level-badge" style={{ background: 'var(--error-soft)', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
               <span className="level-number" style={{ color: 'var(--error)' }}>!</span>
-              <span className="level-label">Locked</span>
+              <span className="level-label">{t('dashboard.locked.badge')}</span>
             </div>
           </div>
-          <h1 className="dashboard-title">System Access Denied</h1>
-          <p className="dashboard-subtitle">You must be logged in to view your adventurer dashboard.</p>
+          <h1 className="dashboard-title">{t('dashboard.locked.title')}</h1>
+          <p className="dashboard-subtitle">{t('dashboard.locked.subtitle')}</p>
         </section>
 
         <section>
           <div className="stats-grid">
-            <Card title="Authentication Required" description="Your stats, quests, and progress are protected. Log in to access your personal dashboard.">
+            <Card title={t('dashboard.locked.authRequired')} description={t('dashboard.locked.authDescription')}>
               <Link to="/login" className="cta-button" style={{ marginTop: 'var(--space-md)', textDecoration: 'none', display: 'inline-flex' }}>
-                <span>Login to System</span>
+                <span>{t('dashboard.locked.loginButton')}</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -146,10 +141,6 @@ const Dashboard: React.FC = () => {
   }
 
   const xpPercent = Math.min(100, Math.round((user.experience / user.maxExperience) * 100));
-  const radius = 38;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (xpPercent / 100) * circumference;
-
   const maxStat = Math.max(...Object.values(user.stats));
 
   const intensityClass = dailyQuest ? `intensity-${dailyQuest.intensity}` : '';
@@ -168,21 +159,21 @@ const Dashboard: React.FC = () => {
         />
 
         <div className="xp-text">
-          <span>{user.experience} / {user.maxExperience} XP</span>
-          <span className="xp-percent">{xpPercent}%</span>
+          <span>{t('dashboard.stats.xp', { current: user.experience, max: user.maxExperience })}</span>
+          <span className="xp-percent">{t('dashboard.stats.xpPercent', { percent: xpPercent })}</span>
         </div>
       </section>
 
       {dailyQuest && (
         <section className="daily-quest-section">
-          <h2 className="section-title">Daily Quest</h2>
+          <h2 className="section-title">{t('dashboard.dailyQuest.title')}</h2>
           <div className={`daily-quest-card ${intensityClass} ${allExercisesCompleted ? 'quest-completed' : ''}`}>
             <div className="daily-quest-header">
-              <div className="daily-quest-day">{WEEKDAYS[new Date().getDay()]}</div>
+              <div className="daily-quest-day">{t(`weekdays.${new Date().getDay()}`)}</div>
               <h3 className="daily-quest-title">{dailyQuest.title}</h3>
               <div className="daily-quest-meta">
                 <span className={`quest-tag-intensity ${intensityClass}`}>{dailyQuest.intensity}</span>
-                <span className="quest-duration">{dailyQuest.duration} min</span>
+                <span className="quest-duration">{t('dashboard.dailyQuest.duration', { minutes: dailyQuest.duration })}</span>
               </div>
             </div>
             <p className="daily-quest-description">{dailyQuest.description}</p>
@@ -197,7 +188,7 @@ const Dashboard: React.FC = () => {
               ))}
             </div>
             {allExercisesCompleted && (
-              <div className="quest-completion-banner">Quest Complete! +XP earned!</div>
+              <div className="quest-completion-banner">{t('dashboard.dailyQuest.completed')}</div>
             )}
           </div>
         </section>
@@ -205,7 +196,7 @@ const Dashboard: React.FC = () => {
 
       {!dailyQuest && (
         <section className="daily-quest-section">
-          <h2 className="section-title">Daily Quest</h2>
+          <h2 className="section-title">{t('dashboard.dailyQuest.title')}</h2>
           <div className="daily-quest-card empty">
             <div className="daily-quest-empty-content">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -213,9 +204,9 @@ const Dashboard: React.FC = () => {
                 <path d="M2 17l10 5 10-5"/>
                 <path d="M2 12l10 5 10-5"/>
               </svg>
-              <p>No quest generated for today yet.</p>
+              <p>{t('dashboard.dailyQuest.empty.description')}</p>
               <Link to="/quest-generator" className="cta-button" style={{ textDecoration: 'none', display: 'inline-flex' }}>
-                <span>Generate Quests</span>
+                <span>{t('dashboard.dailyQuest.empty.button')}</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -234,6 +225,7 @@ const StatPieChart: React.FC<{
   maxStat: number;
   xpPercent: number;
 }> = ({ level, stats, maxStat, xpPercent }) => {
+  const { t } = useTranslation();
   const [hoveredSegment, setHoveredSegment] = useState<number | null>(null);
 
   const size = 180;
@@ -337,7 +329,7 @@ const StatPieChart: React.FC<{
       {/* Center content - always visible level */}
       <div className="stat-pie-center">
         <span className="stat-pie-level">{level}</span>
-        <span className="stat-pie-level-label">LVL</span>
+        <span className="stat-pie-level-label">{t('dashboard.stats.level')}</span>
       </div>
 
       {/* Hover overlay */}
@@ -368,6 +360,7 @@ const ExerciseCheckItem: React.FC<{
   checked: boolean;
   onToggle: () => void;
 }> = ({ exercise, checked, onToggle }) => {
+  const { t } = useTranslation();
   return (
     <label className={`exercise-check-row ${checked ? 'checked' : ''}`}>
       <div className="exercise-checkbox" onClick={onToggle} role="checkbox" aria-checked={checked}>
@@ -379,7 +372,7 @@ const ExerciseCheckItem: React.FC<{
       </div>
       <div className="exercise-check-info">
         <span className="exercise-check-name">{exercise.name}</span>
-        <span className="exercise-check-detail">{exercise.sets} x {exercise.reps} · {exercise.restSeconds}s rest</span>
+        <span className="exercise-check-detail">{t('dashboard.dailyQuest.exercise.setsRepsRest', { sets: exercise.sets, reps: exercise.reps, rest: exercise.restSeconds })}</span>
       </div>
     </label>
   );

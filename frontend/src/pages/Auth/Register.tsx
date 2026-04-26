@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import './Auth.css';
 
@@ -13,6 +14,7 @@ interface FormErrors {
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Register: React.FC = () => {
+  const { t } = useTranslation();
   const { register } = useUser();
   const navigate = useNavigate();
 
@@ -27,27 +29,27 @@ const Register: React.FC = () => {
     const newErrors: FormErrors = {};
 
     if (!username.trim()) {
-      newErrors.username = 'Username is required.';
+      newErrors.username = t('register.form.errors.usernameRequired');
     } else if (username.trim().length < 3) {
-      newErrors.username = 'Username must be at least 3 characters.';
+      newErrors.username = t('register.form.errors.usernameMinLength');
     }
 
     if (!email.trim()) {
-      newErrors.email = 'Email is required.';
+      newErrors.email = t('register.form.errors.emailRequired');
     } else if (!emailRegex.test(email.trim())) {
-      newErrors.email = 'Please enter a valid email address.';
+      newErrors.email = t('register.form.errors.emailInvalid');
     }
 
     if (!password) {
-      newErrors.password = 'Password is required.';
+      newErrors.password = t('register.form.errors.passwordRequired');
     } else if (password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters.';
+      newErrors.password = t('register.form.errors.passwordMinLength');
     }
 
     if (!confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password.';
+      newErrors.confirmPassword = t('register.form.errors.confirmRequired');
     } else if (confirmPassword !== password) {
-      newErrors.confirmPassword = 'Passwords do not match.';
+      newErrors.confirmPassword = t('register.form.errors.passwordMismatch');
     }
 
     setErrors(newErrors);
@@ -62,7 +64,7 @@ const Register: React.FC = () => {
 
     const success = register(username.trim(), email.trim(), password);
     if (success) {
-      setSuccessMessage('Registration successful! Redirecting to login...');
+      setSuccessMessage(t('register.success'));
       setTimeout(() => {
         navigate('/login');
       }, 1500);
@@ -77,8 +79,8 @@ const Register: React.FC = () => {
 
   return (
     <div className="auth-container">
-      <h1 className="auth-title">Join the System</h1>
-      <p className="auth-subtitle">Create your account to begin your journey.</p>
+      <h1 className="auth-title">{t('register.title')}</h1>
+      <p className="auth-subtitle">{t('register.subtitle')}</p>
 
       {successMessage && (
         <div
@@ -96,7 +98,7 @@ const Register: React.FC = () => {
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <div className="form-group">
           <label htmlFor="register-username" className="form-label">
-            Username
+            {t('register.form.username.label')}
           </label>
           <input
             id="register-username"
@@ -107,7 +109,7 @@ const Register: React.FC = () => {
               setUsername(e.target.value);
               if (errors.username) setErrors((prev) => ({ ...prev, username: undefined }));
             }}
-            placeholder="Choose a username"
+            placeholder={t('register.form.username.placeholder')}
             autoComplete="username"
           />
           <div className="error-message">{errors.username || ''}</div>
@@ -115,7 +117,7 @@ const Register: React.FC = () => {
 
         <div className="form-group">
           <label htmlFor="register-email" className="form-label">
-            Email
+            {t('register.form.email.label')}
           </label>
           <input
             id="register-email"
@@ -126,7 +128,7 @@ const Register: React.FC = () => {
               setEmail(e.target.value);
               if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
             }}
-            placeholder="your@email.com"
+            placeholder={t('register.form.email.placeholder')}
             autoComplete="email"
           />
           <div className="error-message">{errors.email || ''}</div>
@@ -134,7 +136,7 @@ const Register: React.FC = () => {
 
         <div className="form-group">
           <label htmlFor="register-password" className="form-label">
-            Password
+            {t('register.form.password.label')}
           </label>
           <input
             id="register-password"
@@ -145,7 +147,7 @@ const Register: React.FC = () => {
               setPassword(e.target.value);
               if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }));
             }}
-            placeholder="Create a password"
+            placeholder={t('register.form.password.placeholder')}
             autoComplete="new-password"
           />
           <div className="error-message">{errors.password || ''}</div>
@@ -153,7 +155,7 @@ const Register: React.FC = () => {
 
         <div className="form-group">
           <label htmlFor="register-confirm" className="form-label">
-            Confirm Password
+            {t('register.form.confirmPassword.label')}
           </label>
           <input
             id="register-confirm"
@@ -164,19 +166,19 @@ const Register: React.FC = () => {
               setConfirmPassword(e.target.value);
               if (errors.confirmPassword) setErrors((prev) => ({ ...prev, confirmPassword: undefined }));
             }}
-            placeholder="Repeat your password"
+            placeholder={t('register.form.confirmPassword.placeholder')}
             autoComplete="new-password"
           />
           <div className="error-message">{errors.confirmPassword || ''}</div>
         </div>
 
         <button type="submit" className="auth-submit-btn" disabled={!isFormValid}>
-          Register
+          {t('register.form.submit')}
         </button>
       </form>
 
       <p className="auth-footer">
-        Already have an account? <Link to="/login">Login here</Link>
+        {t('register.footer')} <Link to="/login">{t('header.user.login')}</Link>
       </p>
     </div>
   );

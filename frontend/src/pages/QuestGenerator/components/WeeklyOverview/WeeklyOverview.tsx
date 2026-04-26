@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { WeeklyPlan } from '../../QuestGenerator.types';
 import QuestCard from '../QuestCard/QuestCard';
 import './WeeklyOverview.css';
@@ -20,6 +21,7 @@ interface WeeklyOverviewProps {
  * WeeklyOverview zeigt den kompletten Wochenplan in einer Tabelle an.
  */
 const WeeklyOverview: React.FC<WeeklyOverviewProps> = ({ plan, onRegenerate }) => {
+  const { t } = useTranslation();
   const completedQuests = plan.quests.filter((q) => q.completed).length;
   const totalDuration = plan.quests.reduce((sum, q) => sum + q.duration, 0);
 
@@ -28,25 +30,25 @@ const WeeklyOverview: React.FC<WeeklyOverviewProps> = ({ plan, onRegenerate }) =
       <div className="weekly-header">
         <div>
           <h2 id="weekly-title" className="weekly-title">
-            Dein Trainingsplan – Woche {plan.weekNumber}
+            {t('weeklyOverview.title', { week: plan.weekNumber })}
           </h2>
           <p className="weekly-subtitle">
             <span className="stat-chip">
               <span className="chip-dot" />
-              {plan.quests.length} Quests
+              {t('weeklyOverview.stats.quests', { count: plan.quests.length })}
             </span>
             <span className="stat-chip">
               <span className="chip-dot" />
-              {totalDuration} Minuten
+              {t('weeklyOverview.stats.duration', { minutes: totalDuration })}
             </span>
             <span className="stat-chip completed">
               <span className="chip-dot" />
-              {completedQuests}/{plan.quests.length} abgeschlossen
+              {t('weeklyOverview.stats.completed', { completed: completedQuests, total: plan.quests.length })}
             </span>
           </p>
         </div>
         <button type="button" className="btn-regenerate" onClick={onRegenerate}>
-          Neue Quests generieren
+          {t('weeklyOverview.regenerate')}
         </button>
       </div>
 

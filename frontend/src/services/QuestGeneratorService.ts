@@ -54,13 +54,10 @@ export function getTodaysQuest(): Quest | null {
   if (!plan || !plan.quests) return null;
 
   const todayIndex = new Date().getDay(); // 0 = Sonntag, 1 = Montag, ...
-  // Unser Plan nutzt dayIndex 0-6. Wir nehmen an die Reihenfolge ist Mo-So oder So-Sa?
-  // Basierend auf der Generierung sind die Tage in der Regel Mo-So, also index 0 = Montag.
-  // Da getDay() 0=Sonntag gibt, brauchen wir eine Mapping-Logik.
-  // Wir nehmen den pragmatischen Ansatz: Suche nach dem passenden Tagesnamen.
-  const weekdays = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
-  const todayName = weekdays[todayIndex];
+  // Unser Plan nutzt dayIndex 0-6 (Mo-So).
+  // Da getDay() 0=Sonntag gibt, mappen wir: So->6, Mo->0, Di->1, ...
+  const mappedIndex = todayIndex === 0 ? 6 : todayIndex - 1;
 
-  const todaysQuest = plan.quests.find((q) => q.day === todayName);
+  const todaysQuest = plan.quests.find((q) => q.dayIndex === mappedIndex);
   return todaysQuest || null;
 }

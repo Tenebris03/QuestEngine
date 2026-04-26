@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuestGenerator } from '../../hooks/useQuestGenerator';
 import PreferenceForm from './components/PreferenceForm/PreferenceForm';
 import WeeklyOverview from './components/WeeklyOverview/WeeklyOverview';
@@ -15,6 +16,7 @@ import './QuestGenerator.css';
  * Hauptkomponente der QuestGenerator Page.
  */
 const QuestGenerator: React.FC = () => {
+  const { t } = useTranslation();
   const {
     preferences,
     plan,
@@ -33,9 +35,9 @@ const QuestGenerator: React.FC = () => {
   return (
     <div className="quest-generator-page">
       <section className="quest-hero">
-        <h1 className="quest-hero-title">Quest Generator</h1>
+        <h1 className="quest-hero-title">{t('questGenerator.title')}</h1>
         <p className="quest-hero-subtitle">
-          Generiere personalisierte Fitness-Quests basierend auf deinen Zielen und Equipment.
+          {t('questGenerator.subtitle')}
         </p>
       </section>
 
@@ -43,9 +45,9 @@ const QuestGenerator: React.FC = () => {
       {!webgpuAvailable && (
         <div className="ai-progress-container warning">
           <p className="ai-progress-message">
-            <strong>⚠️ WebGPU nicht verfügbar</strong>
+            <strong>⚠️ {t('questGenerator.webgpu.warning')}</strong>
             <br />
-            Die KI-Generierung wird nicht funktionieren. Bitte verwenden Sie Chrome oder Edge in der neuesten Version.
+            {t('questGenerator.webgpu.description')}
           </p>
         </div>
       )}
@@ -67,7 +69,7 @@ const QuestGenerator: React.FC = () => {
       {modelError && !aiProgress && (
         <div className="ai-progress-container error">
           <p className="ai-progress-message" style={{ marginBottom: '16px' }}>
-            <strong>❌ Fehler</strong>
+            <strong>❌ {t('questGenerator.error.title')}</strong>
             <br />
             {modelError}
           </p>
@@ -78,7 +80,7 @@ const QuestGenerator: React.FC = () => {
             disabled={isGenerating}
             style={{ padding: '10px 20px', fontSize: '0.9rem' }}
           >
-            Erneut versuchen
+            {t('questGenerator.error.retry')}
           </button>
         </div>
       )}
@@ -101,7 +103,7 @@ const QuestGenerator: React.FC = () => {
               onClick={handleOpenForm}
               disabled={isGenerating}
             >
-              Preferences bearbeiten
+              {t('questGenerator.actions.editPreferences')}
             </button>
           </div>
         </>
@@ -109,14 +111,14 @@ const QuestGenerator: React.FC = () => {
 
       {!plan && !showForm && (
         <div className="no-plan-message">
-          <p>Noch keine Quests generiert.</p>
+          <p>{t('questGenerator.noPlan.description')}</p>
           <button
             type="button"
             className="btn-primary"
             onClick={handleOpenForm}
             disabled={isGenerating}
           >
-            Jetzt starten
+            {t('questGenerator.noPlan.button')}
           </button>
         </div>
       )}
