@@ -1,0 +1,114 @@
+/**
+ * Styles für die EventCard Komponente.
+ */
+
+.event-card {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all 0.3s;
+  border-left: 4px solid var(--accent-muted);
+}
+
+.event-card:hover {
+  border-color: var(--border-light);
+}
+
+/* Typ-spezifische Akzentfarben */
+.event-rest {
+  border-left-color: #10b981;
+}
+
+.event-competition {
+  border-left-color: #ef4444;
+}
+
+.event-milestone {
+  border-left-color: #f59e0b;
+}
+
+.event-group {
+  border-left-color: #8b5cf6;
+}
+
+.event-nutrition {
+  border-left-color: #06b6d4;
+}
+
+.event-main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+}
+
+.event-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.event-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  text-align: left;
+}
+
+.event-title {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+
+.event-description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.event-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.event-type-badge {
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.event-duration {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .event-main {
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .event-content {
+    width: 100%;
+  }
+
+  .event-meta {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+  }
+}
+

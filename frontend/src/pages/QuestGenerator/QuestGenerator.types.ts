@@ -9,6 +9,18 @@ export type ExperienceLevel = 'beginner' | 'intermediate' | 'advanced';
 
 export type IntensityLevel = 'light' | 'medium' | 'hard';
 
+export type EventType = 'rest' | 'competition' | 'milestone' | 'group' | 'nutrition';
+
+/**
+ * Repräsentiert ein Event im Kalender (Ruhetag, Wettkampf, etc.).
+ */
+export interface CalendarEvent {
+  type: EventType;
+  title: string;
+  description: string;
+  duration?: number;
+}
+
 /**
  * Status der lokalen KI-Engine.
  */

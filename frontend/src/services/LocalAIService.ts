@@ -13,14 +13,44 @@ import type {
   Quest,
   Exercise,
   IntensityLevel,
-} from '../QuestGenerator.types';
+} from '../pages/QuestGenerator/QuestGenerator.types';
 
-const MODEL_NAME = 'Llama-3.2-1B-Instruct-q4f16_1-MLC';
+const MODEL_NAME = 'TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC';
+const MODEL_FALLBACKS = [
+  'TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC',
+  'Phi-3-mini-4k-instruct-q4f16_1-MLC',
+  'Llama-3.2-1B-Instruct-q4f16_1-MLC'
+] as const;
+
+let currentModel: string | null = null;
 const DAYS = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
 
 let engine: MLCEngine | null = null;
 let modelLoading = false;
 let lastError: string | null = null;
+
+/**
+ * Wrappt ein Promise mit einem Timeout.
+ * @param promise - Das zu wrappende Promise
+ * @param ms - Timeout in Millisekunden
+ * @param errorMessage - Fehlermeldung bei Timeout
+ */
+function withTimeout<T>(promise: Promise<T>, ms: number, errorMessage: string): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(errorMessage));
+    }, ms);
+    promise
+      .then((value) => {
+        clearTimeout(timer);
+        resolve(value);
+      })
+      .catch((err) => {
+        clearTimeout(timer);
+        reject(err);
+      });
+  });
+}
 
 /**
  * Prüft, ob das KI-Modell bereits geladen ist.
@@ -41,6 +71,10 @@ export function isWebGPUAvailable(): boolean {
  */
 export function getLastError(): string | null {
   return lastError;
+}
+
+export function getCurrentModel(): string | null {
+  return currentModel;
 }
 
 /**
@@ -77,42 +111,61 @@ export async function initModel(
 
   modelLoading = true;
   lastError = null;
-  onProgress?.({
-    status: 'loading_model',
-    message: 'KI-Modell wird initialisiert...',
-    percent: 5,
-  });
 
-  try {
-    engine = await CreateMLCEngine(MODEL_NAME, {
-      initProgressCallback: (progress: { progress: number; text: string }) => {
-        const percent = Math.round(progress.progress * 100);
-        onProgress?.({
-          status: 'loading_model',
-          message: progress.text || `Modell wird geladen... ${percent}%`,
-          percent: 5 + percent * 0.9,
-        });
-      },
+  // Try each model in fallback chain
+  for (const modelName of MODEL_FALLBACKS) {
+    onProgress?.({
+      status: 'loading_model',
+      message: `Probiere Modell: ${modelName}...`,
+      percent: 5,
     });
 
-    onProgress?.({
-      status: 'ready',
-      message: 'KI-Modell bereit!',
-      percent: 100,
-    });
-    modelLoading = false;
-    return true;
-  } catch (error) {
-    lastError = error instanceof Error ? error.message : 'Unbekannter Fehler beim Laden des KI-Modells';
-    console.error('Fehler beim Laden des KI-Modells:', error);
-    onProgress?.({
-      status: 'error',
-      message: lastError,
-      percent: 0,
-    });
-    modelLoading = false;
-    return false;
+    try {
+      engine = await withTimeout(
+        CreateMLCEngine(modelName, {
+          initProgressCallback: (progress: { progress: number; text: string }) => {
+            const percent = Math.round(progress.progress * 100);
+            onProgress?.({
+              status: 'loading_model',
+              message: `${modelName}: ${progress.text || `Laden... ${percent}%`}`,
+              percent: 5 + percent * 0.9,
+            });
+          },
+        }),
+        45000,  // Shorter timeout for fallbacks
+        `Zeitüberschreitung für ${modelName}. Nächstes Modell...`,
+      );
+
+      currentModel = modelName;
+      onProgress?.({
+        status: 'ready',
+        message: `Modell ${modelName} bereit!`,
+        percent: 100,
+      });
+      modelLoading = false;
+      return true;
+    } catch (error) {
+      console.warn(`Modell ${modelName} fehlgeschlagen:`, error);
+      onProgress?.({
+        status: 'loading_model',
+        message: `${modelName} nicht kompatibel, probiere nächstes...`,
+        percent: 2,
+      });
+    }
   }
+
+  // All models failed
+  lastError = 'Keine kompatiblen Modelle gefunden. Hardware/WebGPU Limit erreicht. Algorithmus wird verwendet.';
+  console.error('Alle Modelle fehlgeschlagen:', lastError);
+  onProgress?.({
+    status: 'error',
+    message: lastError,
+    percent: 0,
+  });
+  modelLoading = false;
+  engine = null;
+  return false;
+
 }
 
 /**
@@ -398,11 +451,15 @@ export async function generatePlanWithAI(
         },
       ];
 
-      const reply = await engine.chat.completions.create({
-        messages,
-        temperature: 0.7,
-        max_tokens: 2048,
-      });
+      const reply = await withTimeout(
+        engine.chat.completions.create({
+          messages,
+          temperature: 0.7,
+          max_tokens: 2048,
+        }),
+        60000,
+        'Zeitüberschreitung bei der KI-Generierung. Fallback wird verwendet.',
+      );
 
       const generatedText = reply.choices[0].message.content || '';
 
@@ -419,7 +476,8 @@ export async function generatePlanWithAI(
           message: 'Trainingsplan fertig!',
           percent: 100,
         });
-        return { plan, generatedBy: 'ai', modelName: MODEL_NAME };
+        return { plan, generatedBy: 'ai', modelName: currentModel || MODEL_NAME };
+
       }
     } catch (error) {
       console.error('KI-Generierung fehlgeschlagen:', error);

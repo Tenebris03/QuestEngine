@@ -11,6 +11,7 @@ import {
   loadPreferences,
   loadWeeklyPlan,
   hasPreferences,
+  savePreferences,
   saveWeeklyPlan,
 } from '../services/QuestGeneratorService';
 import {
@@ -55,6 +56,7 @@ export function useQuestGenerator(): UseQuestGeneratorReturn {
   const [modelError, setModelError] = useState<string | null>(null);
 
   const handleSavePreferences = useCallback(async (newPrefs: UserPreferences) => {
+    savePreferences(newPrefs);
     setPreferences(newPrefs);
     setIsGenerating(true);
     setModelError(null);
