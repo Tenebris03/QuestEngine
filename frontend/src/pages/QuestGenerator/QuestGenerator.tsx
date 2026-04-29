@@ -25,6 +25,7 @@ const QuestGenerator: React.FC = () => {
     isGenerating,
     modelError,
     webgpuAvailable,
+    averageRating,
     handleSavePreferences,
     handleRegenerate,
     handleOpenForm,
@@ -95,7 +96,7 @@ const QuestGenerator: React.FC = () => {
 
       {plan && !showForm && (
         <>
-          <WeeklyOverview plan={plan} onRegenerate={handleRegenerate} />
+        <WeeklyOverview plan={plan} onRegenerate={handleRegenerate} averageRating={averageRating} />
           <div className="plan-actions">
             <button
               type="button"

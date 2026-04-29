@@ -50,6 +50,7 @@ export interface Quest {
   intensity: IntensityLevel;
   equipment: string[];
   completed: boolean;
+  difficultyRating?: number; // 1-10 user rating after completion
 }
 
 /**

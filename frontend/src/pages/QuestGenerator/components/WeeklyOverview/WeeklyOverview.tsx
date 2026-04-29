@@ -15,12 +15,13 @@ import './WeeklyOverview.css';
 interface WeeklyOverviewProps {
   plan: WeeklyPlan;
   onRegenerate: () => void;
+  averageRating?: number;
 }
 
 /**
  * WeeklyOverview zeigt den kompletten Wochenplan in einer Tabelle an.
  */
-const WeeklyOverview: React.FC<WeeklyOverviewProps> = ({ plan, onRegenerate }) => {
+const WeeklyOverview: React.FC<WeeklyOverviewProps> = ({ plan, onRegenerate, averageRating }) => {
   const { t } = useTranslation();
   const completedQuests = plan.quests.filter((q) => q.completed).length;
   const totalDuration = plan.quests.reduce((sum, q) => sum + q.duration, 0);
@@ -45,6 +46,12 @@ const WeeklyOverview: React.FC<WeeklyOverviewProps> = ({ plan, onRegenerate }) =
               <span className="chip-dot" />
               {t('weeklyOverview.stats.completed', { completed: completedQuests, total: plan.quests.length })}
             </span>
+            {averageRating > 0 && (
+              <span className="stat-chip rating">
+                <span className="chip-dot" />
+                Ø Schwierigkeit: {averageRating}/10
+              </span>
+            )}
           </p>
         </div>
         <button type="button" className="btn-regenerate" onClick={onRegenerate}>
@@ -53,9 +60,9 @@ const WeeklyOverview: React.FC<WeeklyOverviewProps> = ({ plan, onRegenerate }) =
       </div>
 
       <div className="quests-list" role="list">
-        {plan.quests.map((quest) => (
+{plan.quests.map((quest, index) => (
           <div key={quest.dayIndex} role="listitem">
-            <QuestCard quest={quest} />
+            <QuestCard quest={quest} questIndex={index} />
           </div>
         ))}
       </div>

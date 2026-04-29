@@ -3,8 +3,10 @@
  * Zeigt eine einzelne Quest (Trainingseinheit) in kompakter Form an.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQuestGenerator } from '../../../../hooks/useQuestGenerator';
+import { getQuestCompletionStatus } from '../../../../services/QuestGeneratorService';
 import type { Quest } from '../../QuestGenerator.types';
 import './QuestCard.css';
 
@@ -13,16 +15,36 @@ import './QuestCard.css';
  */
 interface QuestCardProps {
   quest: Quest;
+  questIndex: number;
 }
 
 /**
  * QuestCard zeigt die Details einer täglichen Quest an.
  */
-const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
+const QuestCard: React.FC<QuestCardProps> = ({ quest, questIndex }) => {
   const { t } = useTranslation();
+  const { handleCompleteQuest } = useQuestGenerator();
   const [expanded, setExpanded] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [tempRating, setTempRating] = useState(5);
 
   const intensityClass = `intensity-${quest.intensity}`;
+
+
+
+  const handleRatingSubmit = (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    handleCompleteQuest(questIndex, tempRating);
+    setShowRatingModal(false);
+  };
+
+  const handleComplete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!quest.completed) {
+      setShowRatingModal(true);
+    }
+  };
+
 
   return (
     <article className={`quest-card ${intensityClass}`} aria-expanded={expanded}>
@@ -44,8 +66,67 @@ const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
         <div className="quest-meta">
           <span className={`quest-tag-intensity ${intensityClass}`}>{quest.intensity}</span>
           <span className="quest-duration">{quest.duration} min</span>
+          {!quest.completed ? (
+            <button 
+              className="btn-complete"
+              onClick={handleComplete}
+              aria-label="Quest abschließen und bewerten"
+            >
+              Abschließen
+            </button>
+          ) : (
+            quest.difficultyRating && (
+              <span className="quest-rating">
+                ⭐ {quest.difficultyRating}/10
+              </span>
+            )
+          )}
         </div>
       </div>
+
+{showRatingModal && (
+        <div className={`rating-modal ${intensityClass}`}>
+          <div className="rating-modal-content">
+            <button className="rating-modal-close" onClick={() => setShowRatingModal(false)} aria-label="Schließen">
+              ×
+            </button>
+            <h3>Wie schwer war die Quest?</h3>
+            <div className="rating-stars">
+              {Array.from({length: 10}, (_, i) => (
+                <span key={i} className={`rating-star ${i < tempRating ? 'active' : ''}`}>
+                  ⭐
+                </span>
+              ))}
+            </div>
+            <input
+              type="range"
+              min="1"
+              max="10"
+              value={tempRating}
+              onChange={(e) => setTempRating(Number(e.target.value))}
+              className="rating-slider"
+              aria-label="Schwierigkeitsbewertung 1-10"
+            />
+            <div className="rating-value">{tempRating}/10</div>
+            <div className="rating-modal-buttons">
+              <button 
+                type="button" 
+                onClick={() => setShowRatingModal(false)}
+                className="btn-secondary"
+              >
+                Abbrechen
+              </button>
+              <button 
+                type="button" 
+                onClick={handleRatingSubmit}
+                className="btn-primary"
+              >
+                Speichern
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {expanded && (
         <div className="quest-details">

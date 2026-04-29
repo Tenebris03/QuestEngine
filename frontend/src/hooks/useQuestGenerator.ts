@@ -20,6 +20,7 @@ import {
   getLastError,
   resetEngine,
 } from '../services/LocalAIService';
+import { completeQuest, getAverageRating } from '../services/QuestGeneratorService';
 
 /**
  * Return type for the useQuestGenerator hook.
@@ -32,11 +33,13 @@ export interface UseQuestGeneratorReturn {
   isGenerating: boolean;
   modelError: string | null;
   webgpuAvailable: boolean;
+  averageRating: number;
   handleSavePreferences: (newPrefs: UserPreferences) => Promise<void>;
   handleRegenerate: () => Promise<void>;
   handleOpenForm: () => void;
   handleCloseForm: () => void;
   handleRetry: () => void;
+  handleCompleteQuest: (questIndex: number, rating: number) => void;
 }
 
 /**
@@ -127,6 +130,13 @@ export function useQuestGenerator(): UseQuestGeneratorReturn {
     }
   }, [preferences]);
 
+  const handleCompleteQuest = useCallback((questIndex: number, rating: number) => {
+    completeQuest(questIndex, rating);
+    // Reload plan to update state
+    const updatedPlan = loadWeeklyPlan();
+    if (updatedPlan) setPlan(updatedPlan);
+  }, []);
+
   const handleRetry = useCallback(() => {
     resetEngine();
     setModelError(null);
@@ -137,6 +147,7 @@ export function useQuestGenerator(): UseQuestGeneratorReturn {
   }, [preferences, handleRegenerate]);
 
   const webgpuAvailable = isWebGPUAvailable();
+  const averageRating = getAverageRating();
 
   return {
     preferences,
@@ -146,10 +157,13 @@ export function useQuestGenerator(): UseQuestGeneratorReturn {
     isGenerating,
     modelError,
     webgpuAvailable,
+    averageRating,
     handleSavePreferences,
     handleRegenerate,
     handleOpenForm,
     handleCloseForm,
     handleRetry,
+    handleCompleteQuest,
   };
+
 }

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useUser, type UserStats } from '../../context/UserContext';
 import Card from '../../components/Card/Card';
-import { getTodaysQuest } from '../../services/QuestGeneratorService';
+import { getTodaysQuest, getQuestCompletionStatus, syncDailyCompletion, getTodayIndex } from '../../services/QuestGeneratorService';
 import type { Quest, Exercise } from '../../pages/QuestGenerator/QuestGenerator.types';
 import './Dashboard.css';
 
@@ -97,7 +97,9 @@ const Dashboard: React.FC = () => {
     const quest = getTodaysQuest();
     setDailyQuest(quest);
     if (quest) {
-      setCompletedExercises(loadCompletedExercises(quest.exercises.length));
+      const questIndex = quest.dayIndex; // since getTodaysQuest uses dayIndex
+      const status = getQuestCompletionStatus(questIndex);
+      setCompletedExercises(status.exercisesDone.length > 0 ? status.exercisesDone : loadCompletedExercises(quest.exercises.length));
     }
   }, []);
 
@@ -106,6 +108,11 @@ const Dashboard: React.FC = () => {
       const next = [...prev];
       next[index] = !next[index];
       saveCompletedExercises(next);
+      // Sync to quest if all completed
+      if (dailyQuest && next.every(Boolean)) {
+        const questIndex = dailyQuest.dayIndex;
+        syncDailyCompletion(questIndex, 5, next); // default rating 5
+      }
       return next;
     });
   };

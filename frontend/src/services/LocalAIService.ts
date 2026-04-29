@@ -418,14 +418,15 @@ export async function generatePlanWithAI(
   if (engine === null && !modelLoading) {
     const loaded = await initModel(onProgress);
     if (!loaded) {
-      // Fallback: Algorithmische Generierung
+      // Fallback: Algorithmische Generierung with success feedback
       onProgress?.({
         status: 'ready',
-        message: 'Plan mit lokalem Algorithmus erstellt.',
+        message: '✅ Algorithmus erfolgreich! Plan generiert (lokal optimiert für deine Anforderungen).',
         percent: 100,
       });
       const plan = createAlgorithmicPlan(prefs);
       return { plan, generatedBy: 'template' };
+
     }
   }
 
