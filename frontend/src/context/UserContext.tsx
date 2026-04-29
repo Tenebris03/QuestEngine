@@ -23,6 +23,7 @@ interface UserContextType {
   logout: () => void;
   register: (username: string, email: string, password: string) => boolean;
   updateUser: (updates: Partial<User>) => void;
+  gainRewards: (xpGain: number, statGains: Partial<UserStats>) => void;
 }
 
 const mockUser: User = {
@@ -60,7 +61,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const register = useCallback((username: string, email: string, password: string): boolean => {
-    // Dummy-Registrierung ohne Backend – immer erfolgreich
     console.log('Registered:', { username, email, password });
     return true;
   }, []);
@@ -69,8 +69,39 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser((prev) => (prev ? { ...prev, ...updates } : null));
   }, []);
 
+  // Neue Funktion für XP und Stats inkl. Level-Up Logik
+  const gainRewards = useCallback((xpGain: number, statGains: Partial<UserStats>) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+
+      let newXp = prev.experience + xpGain;
+      let newLevel = prev.level;
+      let newMaxXp = prev.maxExperience;
+
+      // Level-Up Loop: Falls man genug XP für mehrere Level sammelt
+      while (newXp >= newMaxXp) {
+        newXp -= newMaxXp;
+        newLevel += 1;
+        newMaxXp = Math.floor(newMaxXp * 1.2); // Jedes Level benötigt 20% mehr XP
+      }
+
+      return {
+        ...prev,
+        level: newLevel,
+        experience: newXp,
+        maxExperience: newMaxXp,
+        stats: {
+          strength: prev.stats.strength + (statGains.strength || 0),
+          agility: prev.stats.agility + (statGains.agility || 0),
+          intelligence: prev.stats.intelligence + (statGains.intelligence || 0),
+          vitality: prev.stats.vitality + (statGains.vitality || 0),
+        },
+      };
+    });
+  }, []);
+
   return (
-    <UserContext.Provider value={{ user, isAuthenticated, login, logout, register, updateUser }}>
+    <UserContext.Provider value={{ user, isAuthenticated, login, logout, register, updateUser, gainRewards }}>
       {children}
     </UserContext.Provider>
   );
@@ -83,4 +114,3 @@ export const useUser = (): UserContextType => {
   }
   return context;
 };
-

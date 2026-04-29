@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useUser, type UserStats } from '../../context/UserContext';
 import Card from '../../components/Card/Card';
-import { getTodaysQuest, getQuestCompletionStatus, syncDailyCompletion, getTodayIndex } from '../../services/QuestGeneratorService';
+import { getTodaysQuest, getQuestCompletionStatus, syncDailyCompletion, getAverageRating } from '../../services/QuestGeneratorService';
 import type { Quest, Exercise } from '../../pages/QuestGenerator/QuestGenerator.types';
 import './Dashboard.css';
 
@@ -89,15 +89,21 @@ const STATS_CONFIG: StatConfig[] = [
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
-  const { user, isAuthenticated } = useUser();
+  const { user, isAuthenticated, gainRewards } = useUser();
   const [dailyQuest, setDailyQuest] = useState<Quest | null>(null);
   const [completedExercises, setCompletedExercises] = useState<boolean[]>([]);
+
+  // Rating Modal States
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [tempRating, setTempRating] = useState(5);
+  const [lastToggledIndex, setLastToggledIndex] = useState<number | null>(null);
+  const averageRating = getAverageRating();
 
   useEffect(() => {
     const quest = getTodaysQuest();
     setDailyQuest(quest);
     if (quest) {
-      const questIndex = quest.dayIndex; // since getTodaysQuest uses dayIndex
+      const questIndex = quest.dayIndex;
       const status = getQuestCompletionStatus(questIndex);
       setCompletedExercises(status.exercisesDone.length > 0 ? status.exercisesDone : loadCompletedExercises(quest.exercises.length));
     }
@@ -106,21 +112,54 @@ const Dashboard: React.FC = () => {
   const toggleExercise = (index: number) => {
     setCompletedExercises((prev) => {
       const next = [...prev];
-      next[index] = !next[index];
-      saveCompletedExercises(next);
-      // Sync to quest if all completed
-      if (dailyQuest && next.every(Boolean)) {
+      const isChecking = !next[index];
+      next[index] = isChecking;
+
+      if (dailyQuest) {
         const questIndex = dailyQuest.dayIndex;
-        syncDailyCompletion(questIndex, 5, next); // default rating 5
+        const status = getQuestCompletionStatus(questIndex);
+
+        if (isChecking && next.every(Boolean) && !status.completed) {
+          setLastToggledIndex(index);
+          setShowRatingModal(true);
+          return prev; 
+        } else {
+          saveCompletedExercises(next);
+          syncDailyCompletion(questIndex, undefined, next);
+        }
       }
       return next;
     });
   };
 
+  const handleRatingSubmit = () => {
+    if (!dailyQuest || lastToggledIndex === null) return;
+    const questIndex = dailyQuest.dayIndex;
+
+    setCompletedExercises((prev) => {
+      const next = [...prev];
+      next[lastToggledIndex] = true;
+      saveCompletedExercises(next);
+      
+      const multiplier = dailyQuest.intensity === 'hard' ? 20 : dailyQuest.intensity === 'medium' ? 15 : 10;
+      const xp = dailyQuest.duration * multiplier;
+      
+      gainRewards(xp, {
+        strength: dailyQuest.intensity === 'hard' ? 1 : 0,
+        vitality: 1
+      });
+
+      syncDailyCompletion(questIndex, tempRating, next); 
+      return next;
+    });
+
+    setShowRatingModal(false);
+  };
+
   if (!isAuthenticated || !user) {
     return (
       <div className="dashboard-container">
-        <section className="dashboard-hero">
+        <section className="dashboard-hero hero-locked">
           <div className="level-badge-wrapper">
             <div className="level-badge" style={{ background: 'var(--error-soft)', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
               <span className="level-number" style={{ color: 'var(--error)' }}>!</span>
@@ -165,9 +204,14 @@ const Dashboard: React.FC = () => {
           xpPercent={xpPercent}
         />
 
-        <div className="xp-text">
-          <span>{t('dashboard.stats.xp', { current: user.experience, max: user.maxExperience })}</span>
-          <span className="xp-percent">{t('dashboard.stats.xpPercent', { percent: xpPercent })}</span>
+        <div className="xp-stats-container">
+          <div className="xp-text">
+            <span>{t('dashboard.stats.xp', { current: user.experience, max: user.maxExperience })}</span>
+            <span className="xp-percent">{t('dashboard.stats.xpPercent', { percent: xpPercent })}</span>
+          </div>
+          <div className="level-text">
+            <span>{t('dashboard.stats.level')} {user.level}</span>
+          </div>
         </div>
       </section>
 
@@ -181,6 +225,10 @@ const Dashboard: React.FC = () => {
               <div className="daily-quest-meta">
                 <span className={`quest-tag-intensity ${intensityClass}`}>{dailyQuest.intensity}</span>
                 <span className="quest-duration">{t('dashboard.dailyQuest.duration', { minutes: dailyQuest.duration })}</span>
+                {/* BUGFIX: Wir konvertieren zu einer Nummer, bevor wir .toFixed() anwenden, um Abstürze zu vermeiden */}
+                {averageRating > 0 && (
+                  <span className="quest-average-rating">⭐ {Number(averageRating).toFixed(1)}/10</span>
+                )}
               </div>
             </div>
             <p className="daily-quest-description">{dailyQuest.description}</p>
@@ -221,6 +269,51 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </section>
+      )}
+
+      {showRatingModal && (
+        <div className={`rating-modal ${intensityClass}`}>
+          <div className="rating-modal-content">
+            <button className="rating-modal-close" onClick={() => setShowRatingModal(false)} aria-label="Schließen">
+              ×
+            </button>
+            <h3>{t('questCard.actions.complete', 'Quest abschließen')}</h3>
+            <p>{t('preferenceForm.actions.save', 'Wie hart war das Training?')}</p>
+            <div className="rating-stars">
+              {Array.from({length: 10}, (_, i) => (
+                <span key={i} className={`rating-star ${i < tempRating ? 'active' : ''}`}>
+                  ⭐
+                </span>
+              ))}
+            </div>
+            <input
+              type="range"
+              min="1"
+              max="10"
+              value={tempRating}
+              onChange={(e) => setTempRating(Number(e.target.value))}
+              className="rating-slider"
+              aria-label="Schwierigkeitsbewertung 1-10"
+            />
+            <div className="rating-value">{tempRating}/10</div>
+            <div className="rating-modal-buttons">
+              <button 
+                type="button" 
+                onClick={() => setShowRatingModal(false)}
+                className="btn-secondary"
+              >
+                {t('preferenceForm.actions.cancel', 'Abbrechen')}
+              </button>
+              <button 
+                type="button" 
+                onClick={handleRatingSubmit}
+                className="btn-primary"
+              >
+                {t('questCard.actions.complete', 'Speichern')}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -299,10 +392,8 @@ const StatPieChart: React.FC<{
           />
         ))}
         
-        {/* Inner circle background */}
         <circle cx={center} cy={center} r={innerRadius - 2} fill="var(--bg-primary)" />
         
-        {/* Inner XP ring */}
         <circle
           cx={center}
           cy={center}
@@ -333,13 +424,6 @@ const StatPieChart: React.FC<{
         </defs>
       </svg>
 
-      {/* Center content - always visible level */}
-      <div className="stat-pie-center">
-        <span className="stat-pie-level">{level}</span>
-        <span className="stat-pie-level-label">{t('dashboard.stats.level')}</span>
-      </div>
-
-      {/* Hover overlay */}
       {hoveredSegment !== null && (
         <div 
           className="stat-pie-hover"
@@ -379,7 +463,14 @@ const ExerciseCheckItem: React.FC<{
       </div>
       <div className="exercise-check-info">
         <span className="exercise-check-name">{exercise.name}</span>
-        <span className="exercise-check-detail">{t('dashboard.dailyQuest.exercise.setsRepsRest', { sets: exercise.sets, reps: exercise.reps, rest: exercise.restSeconds })}</span>
+        {/* BUGFIX: Sauberer und translationssicherer Text für die Übungs-Parameter */}
+        <div className="exercise-check-detail">
+          <span>{exercise.sets}×</span>
+          <span>{exercise.reps}</span>
+          <span className="exercise-check-rest">
+             ({t('questCard.rest', { seconds: exercise.restSeconds })})
+          </span>
+        </div>
       </div>
     </label>
   );

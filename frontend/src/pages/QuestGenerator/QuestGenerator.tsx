@@ -6,8 +6,10 @@
  */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuestGenerator } from '../../hooks/useQuestGenerator';
+import { useUser } from '../../context/UserContext';
 import PreferenceForm from './components/PreferenceForm/PreferenceForm';
 import WeeklyOverview from './components/WeeklyOverview/WeeklyOverview';
 import './QuestGenerator.css';
@@ -17,6 +19,7 @@ import './QuestGenerator.css';
  */
 const QuestGenerator: React.FC = () => {
   const { t } = useTranslation();
+  const { isAuthenticated } = useUser();
   const {
     preferences,
     plan,
@@ -32,6 +35,27 @@ const QuestGenerator: React.FC = () => {
     handleCloseForm,
     handleRetry,
   } = useQuestGenerator();
+
+  // Sperre die Seite, wenn der Nutzer nicht angemeldet ist
+  if (!isAuthenticated) {
+    return (
+      <div className="quest-generator-page">
+        <section className="quest-hero">
+          <h1 className="quest-hero-title">{t('dashboard.locked.title')}</h1>
+          <p className="quest-hero-subtitle">
+            Du musst im System angemeldet sein, um neue Quests generieren zu können.
+          </p>
+        </section>
+
+        <div className="no-plan-message">
+          <p>{t('dashboard.locked.authDescription')}</p>
+          <Link to="/login" className="btn-primary" style={{ textDecoration: 'none' }}>
+            {t('dashboard.locked.loginButton')}
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="quest-generator-page">

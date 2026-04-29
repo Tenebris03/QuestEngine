@@ -7,12 +7,15 @@
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { UserPreferences, WeeklyPlan, AIProgress } from '../pages/QuestGenerator/QuestGenerator.types';
+import { useUser } from '../context/UserContext';
 import {
   loadPreferences,
   loadWeeklyPlan,
   hasPreferences,
   savePreferences,
   saveWeeklyPlan,
+  completeQuest,
+  getAverageRating
 } from '../services/QuestGeneratorService';
 import {
   generatePlanWithAI,
@@ -20,7 +23,6 @@ import {
   getLastError,
   resetEngine,
 } from '../services/LocalAIService';
-import { completeQuest, getAverageRating } from '../services/QuestGeneratorService';
 
 /**
  * Return type for the useQuestGenerator hook.
@@ -47,6 +49,8 @@ export interface UseQuestGeneratorReturn {
  */
 export function useQuestGenerator(): UseQuestGeneratorReturn {
   const { t } = useTranslation();
+  const { gainRewards } = useUser(); // User Kontext für Rewards
+  
   const [preferences, setPreferences] = useState<UserPreferences | null>(() =>
     hasPreferences() ? loadPreferences() : null,
   );
@@ -131,16 +135,31 @@ export function useQuestGenerator(): UseQuestGeneratorReturn {
   }, [preferences]);
 
   const handleCompleteQuest = useCallback((questIndex: number, rating: number) => {
+    const currentPlan = loadWeeklyPlan();
+    
+    // Prüfen, ob die Quest nicht ohnehin schon abgeschlossen ist
+    if (currentPlan && currentPlan.quests[questIndex] && !currentPlan.quests[questIndex].completed) {
+      const quest = currentPlan.quests[questIndex];
+      
+      // Belohnung berechnen: Längere Dauer & höhere Intensität = Mehr XP
+      const multiplier = quest.intensity === 'hard' ? 20 : quest.intensity === 'medium' ? 15 : 10;
+      const xp = quest.duration * multiplier;
+      
+      // Verteile die Stats
+      gainRewards(xp, {
+        strength: quest.intensity === 'hard' ? 1 : 0,
+        vitality: 1
+      });
+    }
+
     completeQuest(questIndex, rating);
-    // Reload plan to update state
     const updatedPlan = loadWeeklyPlan();
     if (updatedPlan) setPlan(updatedPlan);
-  }, []);
+  }, [gainRewards]);
 
   const handleRetry = useCallback(() => {
     resetEngine();
     setModelError(null);
-    // Trigger regeneration if we have preferences
     if (preferences) {
       handleRegenerate();
     }
@@ -165,5 +184,4 @@ export function useQuestGenerator(): UseQuestGeneratorReturn {
     handleRetry,
     handleCompleteQuest,
   };
-
 }

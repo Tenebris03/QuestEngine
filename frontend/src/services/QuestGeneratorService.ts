@@ -30,11 +30,16 @@ export function hasPreferences(): boolean {
 
 /**
  * Speichert einen Wochenplan im localStorage.
+ * NEU: Löscht auch den täglichen Fortschritt, damit das Dashboard resettet wird.
  */
 export function saveWeeklyPlan(plan: WeeklyPlan): void {
   localStorage.setItem('questGenerator_weeklyPlan', JSON.stringify(plan));
+  
+  // Wenn ein völlig neuer Plan gespeichert wird, löschen wir die 
+  // heutigen Checklisten-Daten, damit das Dashboard frisch startet.
+  const todayKey = getTodayStorageKey();
+  localStorage.removeItem(todayKey);
 }
-
 /**
  * Lädt den letzten Wochenplan aus dem localStorage.
  */

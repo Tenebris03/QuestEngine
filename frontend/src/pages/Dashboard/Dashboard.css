@@ -1,523 +1,478 @@
+:root {
+  --glass-bg: rgba(26, 26, 29, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.04);
+  --glass-border-medium: rgba(255, 255, 255, 0.08);
+  --glass-border-hard: rgba(255, 255, 255, 0.12);
+  --text-muted: #9ca3af;
+  --accent: #8b5cf6;
+  --accent-secondary: #06b6d4;
+  --error: #ef4444;
+  --error-soft: rgba(239, 68, 68, 0.1);
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --radius-full: 9999px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --transition-base: 0.2s ease;
+  --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.15);
+  --bg-primary: #111113;
+}
+
 .dashboard-container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xl);
-  width: 100%;
-  max-width: 1100px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
 }
 
-/* === Hero Section === */
 .dashboard-hero {
-  position: relative;
-  padding: var(--space-lg);
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
-  overflow: hidden;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.dashboard-hero > .dashboard-title,
-.dashboard-hero > .level-badge-wrapper,
-.dashboard-hero > .xp-text {
-  align-self: center;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
   text-align: center;
 }
 
-/* Level Badge with XP Ring */
+.hero-locked {
+  background: var(--error-soft);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  padding: var(--space-xl);
+  border-radius: var(--radius-lg);
+}
+
+.dashboard-title {
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -1.5px;
+}
+
+.dashboard-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 450px;
+}
+
 .level-badge-wrapper {
-  position: relative;
-  width: 96px;
-  height: 96px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.xp-ring {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-  pointer-events: none;
-}
-
-.xp-ring-bg {
-  fill: none;
-  stroke: var(--glass-border);
-  stroke-width: 5;
-}
-
-.xp-ring-fill {
-  fill: none;
-  stroke-width: 5;
-  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.5));
+  margin-top: -24px;
+  margin-bottom: var(--space-xs);
 }
 
 .level-badge {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-muted) 100%);
-  box-shadow: var(--shadow-glow), var(--shadow-md);
-  border: 2px solid var(--glass-border);
-  position: relative;
-  z-index: 1;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: var(--error-soft);
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .level-number {
-  font-size: 1.75rem;
-  font-weight: 900;
-  color: white;
-  line-height: 1;
+  font-size: 1.1rem;
+  font-weight: 800;
 }
 
 .level-label {
-  font-size: 0.6rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.dashboard-title {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  font-weight: 900;
-  margin: 0;
-  line-height: 1.1;
-  background: linear-gradient(135deg, #ffffff 0%, var(--accent-hover) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.xp-text {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 1px;
 }
 
-.xp-percent {
-  background: linear-gradient(135deg, var(--accent-secondary), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 800;
-  font-size: 0.85rem;
+/* === Stat Pie Chart Positionierung === */
+.stat-pie-chart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* === Stats Row (under hero) === */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-sm);
-}
-
-.stat-pill {
+/* === Fix: Überlappender Text-Bereich === */
+.xp-stats-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: var(--space-sm);
-  background: var(--bg-gradient-secondary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
-  position: relative;
-  overflow: hidden;
+  gap: var(--space-xs);
+  width: 100%;
 }
 
-.stat-pill:hover {
-  border-color: var(--stat-color, var(--accent));
-  box-shadow: 0 0 12px var(--stat-glow, rgba(139, 92, 246, 0.2));
-  transform: translateY(-2px);
-}
-
-.stat-pill-icon {
-  color: var(--stat-color, var(--accent));
-  opacity: 0.9;
-  transition: transform 0.3s ease;
-}
-
-.stat-pill:hover .stat-pill-icon {
-  transform: scale(1.15) rotate(-5deg);
-}
-
-.stat-pill-value {
-  font-size: 1.5rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--stat-color, var(--accent)), #ffffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1;
-}
-
-.stat-pill-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+.xp-text {
+  font-size: 1.2rem;
   color: var(--text-muted);
+  display: flex;
+  gap: var(--space-sm);
+  font-weight: 500;
 }
 
-.stat-pill-bar-bg {
-  width: 100%;
-  height: 4px;
-  background: var(--glass-bg);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-  margin-top: 2px;
-  border: 1px solid var(--glass-border);
+.xp-percent {
+  color: #fff;
+  font-weight: 800;
 }
 
-.stat-pill-bar-fill {
-  height: 100%;
-  border-radius: var(--radius-full);
-  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+.level-text {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
 }
 
-/* === Daily Quest Section === */
+/* === Täglicher Quest-Bereich === */
 .daily-quest-section {
-  width: 100%;
+  margin-top: var(--space-xl);
 }
 
 .section-title {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  margin: 0 0 var(--space-md) 0;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: var(--space-lg);
+  letter-spacing: -0.5px;
 }
 
 .daily-quest-card {
-  background: var(--bg-gradient-secondary);
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
-  position: relative;
-  overflow: hidden;
   transition: all var(--transition-base);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 
-.daily-quest-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent-secondary), var(--accent));
-  opacity: 0.6;
-}
-
-.daily-quest-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--border-accent);
-  box-shadow: var(--shadow-accent), var(--shadow-lg);
-}
-
-.daily-quest-card.empty {
-  background: var(--glass-bg);
-  border-style: dashed;
-}
-
-.daily-quest-card.empty::before {
-  display: none;
-}
+.daily-quest-card.intensity-medium { border-color: var(--glass-border-medium); }
+.daily-quest-card.intensity-hard { border-color: var(--glass-border-hard); }
 
 .daily-quest-card.quest-completed {
-  border-color: var(--success);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), var(--shadow-md);
-}
-
-.daily-quest-card.quest-completed::before {
-  background: linear-gradient(90deg, var(--success), var(--accent));
+  border-color: #10b981;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.1), 0 0 10px rgba(16, 185, 129, 0.05);
 }
 
 .daily-quest-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  margin-bottom: var(--space-md);
-  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
 }
 
 .daily-quest-day {
-  font-weight: 700;
-  color: var(--accent);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  min-width: 80px;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
 }
 
 .daily-quest-title {
-  flex: 1;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
   margin: 0;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: -1px;
 }
 
 .daily-quest-meta {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  font-size: 0.9rem;
+}
+
+.quest-tag-intensity {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--accent);
+}
+
+.intensity-medium .quest-tag-intensity { background: rgba(249, 115, 22, 0.1); color: #f97316; }
+.intensity-hard .quest-tag-intensity { background: rgba(239, 68, 68, 0.1); color: var(--error); }
+
+.quest-duration, .quest-average-rating {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
 }
 
 .daily-quest-description {
-  color: var(--text-secondary);
-  margin: 0 0 var(--space-md) 0;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 0 0 var(--space-xl) 0;
 }
 
-/* Exercise Checklist */
+/* === Fix: Gitter-Layout für die Übungsliste === */
 .daily-quest-checklist {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: var(--space-sm);
 }
 
 .exercise-check-row {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
-  background: var(--glass-bg);
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all var(--transition-fast);
-  user-select: none;
+  transition: all var(--transition-base);
 }
 
 .exercise-check-row:hover {
-  border-color: var(--border-light);
-  background: var(--bg-tertiary);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--glass-border-medium);
 }
 
 .exercise-check-row.checked {
-  opacity: 0.5;
-  background: var(--success-soft);
+  background: rgba(16, 185, 129, 0.05);
   border-color: rgba(16, 185, 129, 0.2);
 }
 
-.exercise-check-row.checked .exercise-check-name {
-  text-decoration: line-through;
-  color: var(--text-muted);
-}
-
+/* === Checkbox-UI === */
 .exercise-checkbox {
-  width: 22px;
-  height: 22px;
-  border-radius: var(--radius-sm);
-  border: 2px solid var(--border);
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #fff;
+  transition: all var(--transition-base);
   flex-shrink: 0;
-  transition: all var(--transition-fast);
-  background: var(--bg-tertiary);
 }
 
-.exercise-check-row:hover .exercise-checkbox {
-  border-color: var(--accent);
+.exercise-checkbox:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .exercise-check-row.checked .exercise-checkbox {
-  background: var(--success);
-  border-color: var(--success);
+  background: #10b981;
+  border-color: #10b981;
+  color: #fff;
 }
 
 .exercise-check-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+  gap: 4px;
 }
 
 .exercise-check-name {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  transition: color var(--transition-fast);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.3px;
 }
 
+.exercise-check-row.checked .exercise-check-name {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+/* === Gitter-Struktur für Details === */
 .exercise-check-detail {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.quest-completion-banner {
-  margin-top: var(--space-md);
-  padding: 10px 16px;
-  background: var(--success-soft);
-  color: var(--success);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  border-radius: var(--radius-md);
-  font-weight: 700;
-  font-size: 0.9rem;
-  text-align: center;
-  animation: bannerPulse 2s ease-in-out infinite;
-}
-
-@keyframes bannerPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.2); }
-  50% { box-shadow: 0 0 12px 2px rgba(16, 185, 129, 0.15); }
-}
-
-.daily-quest-empty-content {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
   align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-xl);
-  text-align: center;
+  gap: 6px;
   color: var(--text-muted);
-}
-
-.daily-quest-empty-content svg {
-  opacity: 0.5;
-}
-
-.daily-quest-empty-content p {
-  margin: 0;
-  font-size: 1rem;
-}
-
-/* Intensity colors for daily quest */
-.intensity-light .daily-quest-card::before {
-  background: linear-gradient(90deg, var(--success), transparent);
-}
-
-.intensity-medium .daily-quest-card::before {
-  background: linear-gradient(90deg, var(--warning), transparent);
-}
-
-.intensity-hard .daily-quest-card::before {
-  background: linear-gradient(90deg, var(--error), transparent);
-}
-
-/* Intensity tags reused from quest generator style */
-.quest-tag-intensity {
-  padding: 3px 10px;
-  border-radius: var(--radius-full);
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.intensity-light .quest-tag-intensity {
-  background: var(--success-soft);
-  color: var(--success);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-}
-
-.intensity-medium .quest-tag-intensity {
-  background: var(--warning-soft);
-  color: var(--warning);
-  border: 1px solid rgba(245, 158, 11, 0.2);
-}
-
-.intensity-hard .quest-tag-intensity {
-  background: var(--error-soft);
-  color: var(--error);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-}
-
-.quest-duration {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  min-width: 60px;
-  text-align: right;
-  font-weight: 500;
-}
-
-/* === CTA Button === */
-.cta-button {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: 12px 24px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-muted) 100%);
-  color: white;
-  border-radius: var(--radius-md);
-  font-weight: 700;
   font-size: 0.95rem;
-  transition: all var(--transition-base);
-  box-shadow: var(--shadow-glow);
-  border: none;
+}
+
+.exercise-check-detail span:first-child {
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.7);
+  color: linear-gradient(135deg, rgba(255,255,255,1), rgba(255,255,255,0.7));
+}
+
+.exercise-check-detail span:nth-child(2) {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.exercise-check-rest {
+  color: var(--text-muted);
+  font-weight: 400;
+  opacity: 0.8;
+  margin-left: var(--space-xs);
+}
+
+/* === Quest Completion Banner === */
+.quest-completion-banner {
+  position: absolute;
+  top: -12px;
+  right: var(--space-lg);
+  background: #10b981;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  animation: scaleInBounce 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleInBounce {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* === Rating Modal (wie im Code zuvor) === */
+.rating-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.rating-modal-content {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  max-width: 420px;
+  width: 90vw;
+  box-shadow: var(--shadow-glow), 0 10px 30px rgba(0,0,0,0.4);
+  position: relative;
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.rating-modal h3 {
+  margin: 0 0 var(--space-xs) 0;
+  color: var(--accent);
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.rating-modal p {
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.rating-stars {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-bottom: var(--space-md);
+}
+
+.rating-star {
+  font-size: 1.8rem;
+  opacity: 0.3;
+  transition: all 0.2s ease;
+}
+
+.rating-star.active {
+  opacity: 1;
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
+.rating-slider {
+  width: 100%;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  outline: none;
+  -webkit-appearance: none;
+  margin: var(--space-xl) 0;
   cursor: pointer;
+  transition: all var(--transition-base);
 }
 
-.cta-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(139, 92, 246, 0.3), var(--shadow-lg);
+.rating-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+  border: 2px solid white;
+  transition: all 0.2s ease;
 }
 
-/* === Responsive === */
-@media (max-width: 768px) {
-  .dashboard-hero {
-    padding: var(--space-md);
-  }
-
-  .stats-row {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .daily-quest-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-sm);
-  }
-
-  .daily-quest-meta {
-    width: 100%;
-    justify-content: space-between;
-  }
+.rating-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
 }
 
-@media (max-width: 480px) {
-  .stats-row {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .level-badge-wrapper {
-    width: 80px;
-    height: 80px;
-  }
-
-  .level-badge {
-    width: 56px;
-    height: 56px;
-  }
-
-  .level-number {
-    font-size: 1.5rem;
-  }
-
-  .xp-ring {
-    width: 80px;
-    height: 80px;
-  }
+.rating-value {
+  text-align: center;
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: var(--space-lg) 0;
 }
 
+.rating-modal-buttons {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+}
+
+.rating-modal-close {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rating-modal-close:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
