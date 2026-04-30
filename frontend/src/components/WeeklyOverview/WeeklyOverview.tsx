@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import type { WeeklyPlan } from '../../QuestGenerator.types';
+import type { WeeklyPlan } from '../../types/QuestGenerator.types';
 import QuestCard from '../QuestCard/QuestCard';
 import './WeeklyOverview.css';
 

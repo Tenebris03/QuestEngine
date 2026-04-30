@@ -6,7 +6,7 @@
 
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { UserPreferences, WeeklyPlan, AIProgress } from '../pages/QuestGenerator/QuestGenerator.types';
+import type { UserPreferences, WeeklyPlan, AIProgress } from '../types/QuestGenerator.types';
 import {
   loadPreferences,
   loadWeeklyPlan,

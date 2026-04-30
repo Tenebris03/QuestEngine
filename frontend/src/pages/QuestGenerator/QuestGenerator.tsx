@@ -8,8 +8,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuestGenerator } from '../../hooks/useQuestGenerator';
-import PreferenceForm from './components/PreferenceForm/PreferenceForm';
-import WeeklyOverview from './components/WeeklyOverview/WeeklyOverview';
+import PreferenceForm from '../../components/PreferenceForm/PreferenceForm';
+import WeeklyOverview from '../../components/WeeklyOverview/WeeklyOverview';
 import './QuestGenerator.css';
 
 /**

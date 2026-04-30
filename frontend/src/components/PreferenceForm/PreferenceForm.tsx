@@ -6,8 +6,8 @@
 
 import React, { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { UserPreferences } from '../../QuestGenerator.types';
-import { savePreferences } from '../../../../services/QuestGeneratorService';
+import type { UserPreferences } from '../../types/QuestGenerator.types';
+import { savePreferences } from '../../services/QuestGeneratorService';
 import './PreferenceForm.css';
 
 /**

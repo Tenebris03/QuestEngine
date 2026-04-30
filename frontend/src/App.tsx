@@ -6,8 +6,8 @@ import Home from './pages/Home/Home';
 import QuestGenerator from './pages/QuestGenerator/QuestGenerator';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Settings from './pages/Settings/Settings';
-import Login from './pages/Auth/Login';
-import Register from './pages/Auth/Register';
+import Login from './pages/Auth/Login/Login';
+import Register from './pages/Auth/Register/Register';
 import './App.css';
 
 

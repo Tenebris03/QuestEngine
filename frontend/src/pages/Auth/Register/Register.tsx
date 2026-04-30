@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useUser } from '../../context/UserContext';
-import './Auth.css';
+import { useUser } from '../../../context/UserContext';
+import '../Auth.css';
 
 interface FormErrors {
   username?: string;
@@ -40,15 +40,15 @@ const Register: React.FC = () => {
       newErrors.email = t('form.errors.emailInvalid');
     }
 
-    if (!password) {
+    if (!password.trim()) {
       newErrors.password = t('form.errors.passwordRequired');
-    } else if (password.length < 6) {
+    } else if (password.trim().length < 6) {
       newErrors.password = t('form.errors.passwordMinLength');
     }
 
-    if (!confirmPassword) {
+    if (!confirmPassword.trim()) {
       newErrors.confirmPassword = t('form.errors.confirmRequired');
-    } else if (confirmPassword !== password) {
+    } else if (confirmPassword.trim() !== password.trim()) {
       newErrors.confirmPassword = t('form.errors.passwordMismatch');
     }
 
@@ -62,7 +62,7 @@ const Register: React.FC = () => {
 
     if (!validate()) return;
 
-    const success = register(username.trim(), email.trim(), password);
+    const success = register(username.trim(), email.trim(), password.trim());
     if (success) {
       setSuccessMessage(t('success'));
       setTimeout(() => {
@@ -74,8 +74,8 @@ const Register: React.FC = () => {
   const isFormValid =
     username.trim().length >= 3 &&
     emailRegex.test(email.trim()) &&
-    password.length >= 6 &&
-    confirmPassword === password;
+    password.trim().length >= 6 &&
+    confirmPassword.trim() === password.trim();
 
   return (
     <div className="auth-container">
@@ -83,14 +83,7 @@ const Register: React.FC = () => {
       <p className="auth-subtitle">{t('subtitle')}</p>
 
       {successMessage && (
-        <div
-          className="auth-error"
-          style={{
-            background: 'var(--success-soft)',
-            borderColor: 'rgba(16, 185, 129, 0.2)',
-            color: 'var(--success)',
-          }}
-        >
+        <div className="auth-success">
           {successMessage}
         </div>
       )}

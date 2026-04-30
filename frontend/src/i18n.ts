@@ -17,12 +17,12 @@ import SettingsEn from './pages/Settings/locales/en/translation.json';
 import SettingsDe from './pages/Settings/locales/de/translation.json';
 import QuestGeneratorEn from './pages/QuestGenerator/locales/en/translation.json';
 import QuestGeneratorDe from './pages/QuestGenerator/locales/de/translation.json';
-import PreferenceFormEn from './pages/QuestGenerator/components/PreferenceForm/locales/en/translation.json';
-import PreferenceFormDe from './pages/QuestGenerator/components/PreferenceForm/locales/de/translation.json';
-import WeeklyOverviewEn from './pages/QuestGenerator/components/WeeklyOverview/locales/en/translation.json';
-import WeeklyOverviewDe from './pages/QuestGenerator/components/WeeklyOverview/locales/de/translation.json';
-import QuestCardEn from './pages/QuestGenerator/components/QuestCard/locales/en/translation.json';
-import QuestCardDe from './pages/QuestGenerator/components/QuestCard/locales/de/translation.json';
+import PreferenceFormEn from './components/PreferenceForm/locales/en/translation.json';
+import PreferenceFormDe from './components/PreferenceForm/locales/de/translation.json';
+import WeeklyOverviewEn from './components/WeeklyOverview/locales/en/translation.json';
+import WeeklyOverviewDe from './components/WeeklyOverview/locales/de/translation.json';
+import QuestCardEn from './components/QuestCard/locales/en/translation.json';
+import QuestCardDe from './components/QuestCard/locales/de/translation.json';
 
 const resources = {
   en: {

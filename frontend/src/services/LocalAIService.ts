@@ -13,7 +13,7 @@ import type {
   Quest,
   Exercise,
   IntensityLevel,
-} from '../pages/QuestGenerator/QuestGenerator.types';
+} from '../types/QuestGenerator.types';
 
 const MODEL_NAME = 'Llama-3.2-1B-Instruct-q4f16_1-MLC';
 const DAYS = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];

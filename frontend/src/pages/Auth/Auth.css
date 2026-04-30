@@ -149,6 +149,18 @@
   text-align: center;
 }
 
+.auth-success {
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--success-soft);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: var(--radius-md);
+  color: var(--success);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .auth-container {
     padding: var(--space-xl) var(--space-md);

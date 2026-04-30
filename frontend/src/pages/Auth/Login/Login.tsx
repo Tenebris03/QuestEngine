@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useUser } from '../../context/UserContext';
-import './Auth.css';
+import { useUser } from '../../../context/UserContext';
+import '../Auth.css';
 
 interface FormErrors {
   username?: string;
@@ -28,9 +28,9 @@ const Login: React.FC = () => {
       newErrors.username = t('form.errors.usernameMinLength');
     }
 
-    if (!password) {
+    if (!password.trim()) {
       newErrors.password = t('form.errors.passwordRequired');
-    } else if (password.length < 6) {
+    } else if (password.trim().length < 6) {
       newErrors.password = t('form.errors.passwordMinLength');
     }
 
@@ -44,7 +44,7 @@ const Login: React.FC = () => {
 
     if (!validate()) return;
 
-    const success = login(username.trim(), password);
+    const success = login(username.trim(), password.trim());
     if (success) {
       navigate('/dashboard');
     } else {
@@ -52,7 +52,7 @@ const Login: React.FC = () => {
     }
   };
 
-  const isFormValid = username.trim().length >= 3 && password.length >= 6;
+  const isFormValid = username.trim().length >= 3 && password.trim().length >= 6;
 
   return (
     <div className="auth-container">

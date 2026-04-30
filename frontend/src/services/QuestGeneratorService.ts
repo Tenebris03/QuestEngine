@@ -4,7 +4,7 @@
  * Die Generierungslogik wurde in LocalAIService.ts verschoben (WebLLM).
  */
 
-import type { UserPreferences, WeeklyPlan, Quest } from '../pages/QuestGenerator/QuestGenerator.types';
+import type { UserPreferences, WeeklyPlan, Quest } from '../types/QuestGenerator.types';
 
 /**
  * Speichert User-Preferences im localStorage.

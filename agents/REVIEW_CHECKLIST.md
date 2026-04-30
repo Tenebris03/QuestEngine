@@ -22,7 +22,6 @@
 - [ ] Accessibility: contrast ≥ 4.5:1, semantic HTML, keyboard nav works
 
 ## Tailwind-Specific
-- [ ] Theme extended in `tailwind.config.ts` matches legacy variables
 - [ ] `@apply` used only for 3+ identical class combinations
 - [ ] `group`/`peer` modifiers used correctly for hover/focus states
 - [ ] Dark mode (if applicable) uses `dark:` prefix consistently

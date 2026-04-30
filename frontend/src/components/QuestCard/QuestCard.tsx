@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Quest } from '../../QuestGenerator.types';
+import type { Quest } from '@/types/QuestGenerator.types';
 import './QuestCard.css';
 
 /**

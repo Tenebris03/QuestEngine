@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useUser, type UserStats } from '../../context/UserContext';
 import Card from '../../components/Card/Card';
 import { getTodaysQuest } from '../../services/QuestGeneratorService';
-import type { Quest, Exercise } from '../../pages/QuestGenerator/QuestGenerator.types';
+import type { Quest, Exercise } from '../../types/QuestGenerator.types';
 import './Dashboard.css';
 
 interface StatConfig {
