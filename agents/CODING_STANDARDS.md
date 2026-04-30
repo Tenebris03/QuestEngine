@@ -1,40 +1,19 @@
-
----
-
-## 📄 `CODING_STANDARDS.md`
-```markdown
 # Coding Standards
-## File & Naming
-- Components: `PascalCase.tsx`
-- Hooks/Utils: `camelCase.ts`
-- Types/Interfaces: `PascalCase.ts`
-- CSS/Styles: DELETED (replaced by Tailwind)
 
-## TypeScript
-- ✅ Interfaces for props: `interface ComponentProps { ... }`
-- ✅ Explicit return types for public functions
-- ✅ `readonly` for immutable data
-- ❌ No `any`, no implicit `any`, no `as` casting without comment
-- ✅ `strictNullChecks: true` enforced
+## 1. Naming Conventions
+- **Components**: `PascalCase.tsx`.
+- **Styles**: `PascalCase.module.css` (must match the component name).
+- **Class Names**: Use `camelCase` for classes within CSS modules (e.g., `.containerMain`).
 
-## React 19 + Compiler
-- ✅ Functional components only
-- ✅ Hooks at top-level only
-- ✅ `useMemo`/`useCallback` only for expensive operations or stable refs
-- ✅ **NEVER** mutate state directly
-- ✅ **NEVER** use inline functions in JSX if avoidable (Compiler handles most, but keep clean)
+## 2. CSS Modules Architecture
+- **Local Scoping**: All styles must be locally scoped. Global styles are reserved for `index.css` (reset/base only).
+- **Importing**: Use the `styles` object: `import styles from './MyComponent.module.css';`.
+- **Composition**: Use the CSS `composes` keyword or CSS Variables for shared design tokens (colors, spacing).
 
-## i18n
-- ✅ All user-facing text wrapped in `t('key')`
-- ✅ Translation keys: `page.section.element.state` (e.g., `dashboard.stats.xp`)
-- ✅ Fallback language: `en`
+## 3. TypeScript & React 19
+- **Strict Props**: Use `interface` for all component props.
+- **Cleanup**: Styles must be removed when a component is deleted; CSS Modules facilitate this by co-location.
 
-## Imports Order
-```ts
-import React from 'react';
-// Third-party
-import { useTranslation } from 'react-i18next';
-// Internal
-import { useUser } from '@/context/UserContext';
-// Styles (if base CSS needed)
-import '@/index.css';
+## 4. Internationalization (i18n)
+- All user-facing strings must use the `t()` function.
+- Locales reside in a `locales/` folder adjacent to the component.

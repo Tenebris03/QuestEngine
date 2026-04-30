@@ -1,34 +1,23 @@
-# Project Context
+# Project Context: QuestEngine
+
 ## Architecture
+QuestEngine is a monorepo featuring a NestJS backend and a React 19 frontend. It prioritizes clean code, local scoping, and modern web standards.
 
-frontend/
-├── src/
-│ ├── components/ # Reusable UI (atomic → composite)
-│ ├── pages/ # Route-level views
-│ ├── hooks/ # Custom React hooks
-│ ├── services/ # API & AI logic
-│ ├── context/ # Global state (User, i18n, etc.)
-│ ├── theme/ # Tailwind config + base CSS
-│ └── types/ # Shared TS definitions
-└── public/ # Static assets
-
-
-
+- **backend/**: NestJS API.
+- **frontend/**: React 19 application using Vite and CSS Modules.
+- **agents/**: System instructions and AI workflows.
 
 ## Tech Stack
-| Layer | Technology | Version/Notes |
-|-------|------------|---------------|
-| Framework | React | 19 (Compiler enabled) |
-| Bundler | Vite | 5+ |
-| Language | TypeScript | Strict mode, `noUnusedLocals: true` |
-| Styling | Tailwind CSS | v3.4+, JIT, `tailwind-merge` + `clsx` |
-| Routing | React Router | v7 |
-| i18n | i18next | `react-i18next` |
-| AI | WebLLM | Browser-local LLM fallback |
+| Layer | Technology | Notes |
+|-------|------------|-------|
+| **Backend** | NestJS | TypeScript-first logic. |
+| **Frontend** | React 19 | Vite, TypeScript (Strict), CSS Modules. |
+| **I18n** | i18next | Co-located locale files per component. |
+| **Styling** | CSS Modules | Local scoping via `*.module.css` files. |
+| **AI** | Local / WebLLM | Integration for quest generation. |
 
-## Target State
-- ✅ Zero custom `.css` files (except `index.css` for base resets)
-- ✅ All styling via Tailwind utility classes
-- ✅ Theme extended from `tailwind.config.ts` (matches legacy `variables.css`)
-- ✅ Fully responsive, accessible, i18n-ready
-- ✅ React Compiler compatible (no dynamic class strings that break memoization)
+## Development Guiding Principles
+1. **Encapsulation**: Every component is a self-contained unit with its own logic, styles, and translations.
+2. **Zero Runtime Styling**: Styles are processed at build time via CSS Modules to ensure maximum performance.
+3. **Modern CSS**: Leverage native CSS features (nesting, variables, container queries) instead of utility frameworks.
+

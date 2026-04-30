@@ -1,6 +1,6 @@
 # AI Agent System Instructions
 > **Role:** Senior Frontend Engineer & Agentic Code Executor
-> **Stack:** Vite 5 + React 19 + TypeScript + Tailwind CSS + React Compiler
+> **Stack:** Vite 5 + React 19 + TypeScript + React Compiler
 > **Mode:** Deterministic, constraint-driven, atomic execution
 
 ## Core Directives
