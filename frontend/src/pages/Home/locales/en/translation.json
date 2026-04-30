@@ -1,0 +1,31 @@
+{
+  "hero": {
+    "badge": "System Initialized",
+    "title1": "Netflix and Chill?",
+    "title2": "Level Up Your Life.",
+    "subtitle": "The system has chosen you. Complete quests in the real world, increase your stats and break your limits.",
+    "cta": "Join the System"
+  },
+  "features": {
+    "title": "Available Quest Types",
+    "daily": {
+      "title": "Daily Quests",
+      "description": "Repeatable tasks that strengthen your foundation. Ignoring them leads to penalties.",
+      "tag": "Daily: 100 Push-ups"
+    },
+    "attribute": {
+      "title": "Attribute Upgrade",
+      "description": "Specific challenges that permanently increase your strength, agility or intelligence.",
+      "tag": "+5 STR Points"
+    },
+    "penalty": {
+      "title": "Penalty System",
+      "description": "Those who break the rules of the system must face the penalty. Failure is not an option.",
+      "tag": "Status: Emergency"
+    }
+  },
+  "cta": {
+    "title": "Ready for your first Rank-Up?",
+    "button": "Start Now"
+  }
+}

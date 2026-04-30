@@ -1,0 +1,5 @@
+{
+  "setsReps": "{{sets}} Sets × {{reps}} Reps",
+  "rest": "{{seconds}}s Rest",
+  "equipment": "Equipment: {{items}}"
+}

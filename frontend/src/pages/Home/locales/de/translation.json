@@ -1,0 +1,31 @@
+{
+  "hero": {
+    "badge": "System Initialisiert",
+    "title1": "Netflix and Chill?",
+    "title2": "Level Up Your Life.",
+    "subtitle": "Das System hat dich ausgewählt. Erledige Quests in der realen Welt, steigere deine Stats und brich deine Limits.",
+    "cta": "System beitreten"
+  },
+  "features": {
+    "title": "Verfügbare Quest-Typen",
+    "daily": {
+      "title": "Tägliche Quests",
+      "description": "Wiederholbare Aufgaben, die dein Fundament stärken. Ignorieren führt zu Strafen.",
+      "tag": "Daily: 100 Liegestütze"
+    },
+    "attribute": {
+      "title": "Attribut-Aufstieg",
+      "description": "Spezifische Herausforderungen, die deine Kraft, Agilität oder Intelligenz dauerhaft erhöhen.",
+      "tag": "+5 STR Points"
+    },
+    "penalty": {
+      "title": "Penalty System",
+      "description": "Wer die Regeln des Systems bricht, muss sich der Strafe stellen. Scheitern ist keine Option.",
+      "tag": "Status: Emergency"
+    }
+  },
+  "cta": {
+    "title": "Bist du bereit für den ersten Rank-Up?",
+    "button": "Jetzt starten"
+  }
+}

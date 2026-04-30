@@ -1,0 +1,44 @@
+{
+  "locked": {
+    "badge": "Gesperrt",
+    "title": "Systemzugriff verweigert",
+    "subtitle": "Du musst angemeldet sein, um dein Abenteurer-Dashboard zu sehen.",
+    "authRequired": "Authentifizierung erforderlich",
+    "authDescription": "Deine Stats, Quests und Fortschritte sind geschützt. Melde dich an, um auf dein persönliches Dashboard zuzugreifen.",
+    "loginButton": "Zum Login"
+  },
+  "stats": {
+    "strength": {
+      "label": "STR",
+      "description": "Physische Kraft und Nahkampfschaden."
+    },
+    "agility": {
+      "label": "AGI",
+      "description": "Geschwindigkeit, Ausweichchance und Reflexe."
+    },
+    "intelligence": {
+      "label": "INT",
+      "description": "Magieschaden und Fertigkeitenlernen."
+    },
+    "vitality": {
+      "label": "VIT",
+      "description": "Gesundheitspunkte und Ausdauer."
+    },
+    "level": "LVL",
+    "xp": "{{current}} / {{max}} XP",
+    "xpPercent": "{{percent}}%"
+  },
+  "dailyQuest": {
+    "title": "Tägliche Quest",
+    "empty": {
+      "description": "Noch keine Quest für heute generiert.",
+      "button": "Quests generieren"
+    },
+    "completed": "Quest abgeschlossen! +XP verdient!",
+    "intensity": "Intensität",
+    "duration": "{{minutes}} min",
+    "exercise": {
+      "setsRepsRest": "{{sets}} x {{reps}} · {{rest}}s Pause"
+    }
+  }
+}

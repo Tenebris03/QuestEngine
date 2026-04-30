@@ -1,0 +1,44 @@
+{
+  "locked": {
+    "badge": "Locked",
+    "title": "System Access Denied",
+    "subtitle": "You must be logged in to view your adventurer dashboard.",
+    "authRequired": "Authentication Required",
+    "authDescription": "Your stats, quests, and progress are protected. Log in to access your personal dashboard.",
+    "loginButton": "Login to System"
+  },
+  "stats": {
+    "strength": {
+      "label": "STR",
+      "description": "Physical power and melee damage."
+    },
+    "agility": {
+      "label": "AGI",
+      "description": "Speed, dodge chance, and reflexes."
+    },
+    "intelligence": {
+      "label": "INT",
+      "description": "Magic damage and skill learning."
+    },
+    "vitality": {
+      "label": "VIT",
+      "description": "Health points and endurance."
+    },
+    "level": "LVL",
+    "xp": "{{current}} / {{max}} XP",
+    "xpPercent": "{{percent}}%"
+  },
+  "dailyQuest": {
+    "title": "Daily Quest",
+    "empty": {
+      "description": "No quest generated for today yet.",
+      "button": "Generate Quests"
+    },
+    "completed": "Quest Complete! +XP earned!",
+    "intensity": "Intensity",
+    "duration": "{{minutes}} min",
+    "exercise": {
+      "setsRepsRest": "{{sets}} x {{reps}} · {{rest}}s rest"
+    }
+  }
+}

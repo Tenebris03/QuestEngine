@@ -19,7 +19,7 @@ interface QuestCardProps {
  * QuestCard zeigt die Details einer täglichen Quest an.
  */
 const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('questCard');
   const [expanded, setExpanded] = useState(false);
 
   const intensityClass = `intensity-${quest.intensity}`;
@@ -56,16 +56,16 @@ const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
               <li key={index} className="exercise-item">
                 <span className="exercise-name">{exercise.name}</span>
                 <span className="exercise-stats">
-                  {t('questCard.setsReps', { sets: exercise.sets, reps: exercise.reps })}
+                  {t('setsReps', { sets: exercise.sets, reps: exercise.reps })}
                 </span>
-                <span className="exercise-rest">{t('questCard.rest', { seconds: exercise.restSeconds })}</span>
+                <span className="exercise-rest">{t('rest', { seconds: exercise.restSeconds })}</span>
               </li>
             ))}
           </ul>
 
           {quest.equipment.length > 0 && (
             <div className="quest-equipment">
-              <strong>{t('questCard.equipment', { items: quest.equipment.join(', ') })}</strong>
+              <strong>{t('equipment', { items: quest.equipment.join(', ') })}</strong>
             </div>
           )}
         </div>

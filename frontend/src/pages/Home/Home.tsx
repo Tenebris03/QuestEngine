@@ -4,13 +4,13 @@ import Card from '../../components/Card/Card';
 import './Home.css';
 
 const Home: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
   const [displayedText, setDisplayedText] = useState('');
   const [isRed, setIsRed] = useState(false);
   const [phase, setPhase] = useState<'typing1' | 'pause1' | 'shake' | 'deleting' | 'typing2'>('typing1');
 
-  const text1 = t('home.hero.title1');
-  const text2 = t('home.hero.title2');
+  const text1 = t('hero.title1');
+  const text2 = t('hero.title2');
   const typingSpeed = 80;
   const deletingSpeed = 35;
   const pauseDuration = 600;
@@ -63,14 +63,14 @@ const Home: React.FC = () => {
       <section className="hero-section">
         <div className="hero-badge">
           <span className="badge-dot" />
-          {t('home.hero.badge')}
+          {t('hero.badge')}
         </div>
         <h1 className={`hero-title ${isRed ? 'is-red' : ''}`}>{displayedText}</h1>
         <p className="hero-subtitle">
-          {t('home.hero.subtitle')}
+          {t('hero.subtitle')}
         </p>
         <button className="cta-button">
-          <span>{t('home.hero.cta')}</span>
+          <span>{t('hero.cta')}</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -81,27 +81,27 @@ const Home: React.FC = () => {
 
       {/* Feature Section mit Quest-Beispielen */}
       <section>
-        <h2 className="section-title">{t('home.features.title')}</h2>
+        <h2 className="section-title">{t('features.title')}</h2>
         <div className="features-grid">
           <Card
-            title={t('home.features.daily.title')}
-            description={t('home.features.daily.description')}
+            title={t('features.daily.title')}
+            description={t('features.daily.description')}
           >
-            <div className="quest-tag tag-daily">{t('home.features.daily.tag')}</div>
+            <div className="quest-tag tag-daily">{t('features.daily.tag')}</div>
           </Card>
 
           <Card
-            title={t('home.features.attribute.title')}
-            description={t('home.features.attribute.description')}
+            title={t('features.attribute.title')}
+            description={t('features.attribute.description')}
           >
-            <div className="quest-tag tag-side">{t('home.features.attribute.tag')}</div>
+            <div className="quest-tag tag-side">{t('features.attribute.tag')}</div>
           </Card>
 
           <Card
-            title={t('home.features.penalty.title')}
-            description={t('home.features.penalty.description')}
+            title={t('features.penalty.title')}
+            description={t('features.penalty.description')}
           >
-            <div className="quest-tag tag-penalty">{t('home.features.penalty.tag')}</div>
+            <div className="quest-tag tag-penalty">{t('features.penalty.tag')}</div>
           </Card>
         </div>
       </section>
@@ -110,9 +110,9 @@ const Home: React.FC = () => {
 
       {/* Stat Preview Section */}
       <section className="cta-section">
-        <h3>{t('home.cta.title')}</h3>
+        <h3>{t('cta.title')}</h3>
         <button className="cta-button" style={{ marginTop: 0 }}>
-          <span>{t('home.cta.button')}</span>
+          <span>{t('cta.button')}</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -123,4 +123,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-

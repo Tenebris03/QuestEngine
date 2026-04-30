@@ -21,7 +21,7 @@ interface WeeklyOverviewProps {
  * WeeklyOverview zeigt den kompletten Wochenplan in einer Tabelle an.
  */
 const WeeklyOverview: React.FC<WeeklyOverviewProps> = ({ plan, onRegenerate }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('weeklyOverview');
   const completedQuests = plan.quests.filter((q) => q.completed).length;
   const totalDuration = plan.quests.reduce((sum, q) => sum + q.duration, 0);
 
@@ -30,25 +30,25 @@ const WeeklyOverview: React.FC<WeeklyOverviewProps> = ({ plan, onRegenerate }) =
       <div className="weekly-header">
         <div>
           <h2 id="weekly-title" className="weekly-title">
-            {t('weeklyOverview.title', { week: plan.weekNumber })}
+            {t('title', { week: plan.weekNumber })}
           </h2>
           <p className="weekly-subtitle">
             <span className="stat-chip">
               <span className="chip-dot" />
-              {t('weeklyOverview.stats.quests', { count: plan.quests.length })}
+              {t('stats.quests', { count: plan.quests.length })}
             </span>
             <span className="stat-chip">
               <span className="chip-dot" />
-              {t('weeklyOverview.stats.duration', { minutes: totalDuration })}
+              {t('stats.duration', { minutes: totalDuration })}
             </span>
             <span className="stat-chip completed">
               <span className="chip-dot" />
-              {t('weeklyOverview.stats.completed', { completed: completedQuests, total: plan.quests.length })}
+              {t('stats.completed', { completed: completedQuests, total: plan.quests.length })}
             </span>
           </p>
         </div>
         <button type="button" className="btn-regenerate" onClick={onRegenerate}>
-          {t('weeklyOverview.regenerate')}
+          {t('regenerate')}
         </button>
       </div>
 

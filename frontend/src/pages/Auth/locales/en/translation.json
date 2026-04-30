@@ -1,0 +1,36 @@
+{
+  "title": "System Login",
+  "subtitle": "Enter your credentials to access the system.",
+  "form": {
+    "username": {
+      "label": "Username",
+      "placeholder": "Enter your username"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password"
+    },
+    "submit": "Login",
+    "errors": {
+      "usernameRequired": "Username is required.",
+      "usernameMinLength": "Username must be at least 3 characters.",
+      "passwordRequired": "Password is required.",
+      "passwordMinLength": "Password must be at least 6 characters.",
+      "invalidCredentials": "Invalid username or password."
+    }
+  },
+  "footer": "No account yet? <0>Register here</0>",
+  "success": "Registration successful! Redirecting to login...",
+  "email": {
+    "label": "Email",
+    "placeholder": "your@email.com"
+  },
+  "confirmPassword": {
+    "label": "Confirm Password",
+    "placeholder": "Repeat your password"
+  },
+  "user": {
+    "login": "Login",
+    "register": "Register"
+  }
+}

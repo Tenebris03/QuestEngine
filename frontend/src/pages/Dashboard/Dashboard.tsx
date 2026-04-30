@@ -88,7 +88,7 @@ const STATS_CONFIG: StatConfig[] = [
 ];
 
 const Dashboard: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('dashboard');
   const { user, isAuthenticated } = useUser();
   const [dailyQuest, setDailyQuest] = useState<Quest | null>(null);
   const [completedExercises, setCompletedExercises] = useState<boolean[]>([]);
@@ -117,18 +117,18 @@ const Dashboard: React.FC = () => {
           <div className="level-badge-wrapper">
             <div className="level-badge" style={{ background: 'var(--error-soft)', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
               <span className="level-number" style={{ color: 'var(--error)' }}>!</span>
-              <span className="level-label">{t('dashboard.locked.badge')}</span>
+              <span className="level-label">{t('locked.badge')}</span>
             </div>
           </div>
-          <h1 className="dashboard-title">{t('dashboard.locked.title')}</h1>
-          <p className="dashboard-subtitle">{t('dashboard.locked.subtitle')}</p>
+          <h1 className="dashboard-title">{t('locked.title')}</h1>
+          <p className="dashboard-subtitle">{t('locked.subtitle')}</p>
         </section>
 
         <section>
           <div className="stats-grid">
-            <Card title={t('dashboard.locked.authRequired')} description={t('dashboard.locked.authDescription')}>
+            <Card title={t('locked.authRequired')} description={t('locked.authDescription')}>
               <Link to="/login" className="cta-button" style={{ marginTop: 'var(--space-md)', textDecoration: 'none', display: 'inline-flex' }}>
-                <span>{t('dashboard.locked.loginButton')}</span>
+                <span>{t('locked.loginButton')}</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -170,15 +170,15 @@ const Dashboard: React.FC = () => {
           </svg>
           <div className="level-badge">
             <span className="level-number">{user.level}</span>
-            <span className="level-label">{t('dashboard.stats.level')}</span>
+            <span className="level-label">{t('stats.level')}</span>
           </div>
         </div>
 
         <h1 className="dashboard-title">{user.name}</h1>
 
         <div className="xp-text">
-          <span>{t('dashboard.stats.xp', { current: user.experience, max: user.maxExperience })}</span>
-          <span className="xp-percent">{t('dashboard.stats.xpPercent', { percent: xpPercent })}</span>
+          <span>{t('stats.xp', { current: user.experience, max: user.maxExperience })}</span>
+          <span className="xp-percent">{t('stats.xpPercent', { percent: xpPercent })}</span>
         </div>
 
         <div className="stats-row">
@@ -216,14 +216,14 @@ const Dashboard: React.FC = () => {
 
       {dailyQuest && (
         <section className="daily-quest-section">
-          <h2 className="section-title">{t('dashboard.dailyQuest.title')}</h2>
+          <h2 className="section-title">{t('dailyQuest.title')}</h2>
           <div className={`daily-quest-card ${intensityClass} ${allExercisesCompleted ? 'quest-completed' : ''}`}>
             <div className="daily-quest-header">
               <div className="daily-quest-day">{t(`weekdays.${new Date().getDay()}`)}</div>
               <h3 className="daily-quest-title">{dailyQuest.title}</h3>
               <div className="daily-quest-meta">
                 <span className={`quest-tag-intensity ${intensityClass}`}>{dailyQuest.intensity}</span>
-                <span className="quest-duration">{t('dashboard.dailyQuest.duration', { minutes: dailyQuest.duration })}</span>
+                <span className="quest-duration">{t('dailyQuest.duration', { minutes: dailyQuest.duration })}</span>
               </div>
             </div>
             <p className="daily-quest-description">{dailyQuest.description}</p>
@@ -238,7 +238,7 @@ const Dashboard: React.FC = () => {
               ))}
             </div>
             {allExercisesCompleted && (
-              <div className="quest-completion-banner">{t('dashboard.dailyQuest.completed')}</div>
+              <div className="quest-completion-banner">{t('dailyQuest.completed')}</div>
             )}
           </div>
         </section>
@@ -246,7 +246,7 @@ const Dashboard: React.FC = () => {
 
       {!dailyQuest && (
         <section className="daily-quest-section">
-          <h2 className="section-title">{t('dashboard.dailyQuest.title')}</h2>
+          <h2 className="section-title">{t('dailyQuest.title')}</h2>
           <div className="daily-quest-card empty">
             <div className="daily-quest-empty-content">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -254,9 +254,9 @@ const Dashboard: React.FC = () => {
                 <path d="M2 17l10 5 10-5"/>
                 <path d="M2 12l10 5 10-5"/>
               </svg>
-              <p>{t('dashboard.dailyQuest.empty.description')}</p>
+              <p>{t('dailyQuest.empty.description')}</p>
               <Link to="/quest-generator" className="cta-button" style={{ textDecoration: 'none', display: 'inline-flex' }}>
-                <span>{t('dashboard.dailyQuest.empty.button')}</span>
+                <span>{t('dailyQuest.empty.button')}</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -274,7 +274,7 @@ const ExerciseCheckItem: React.FC<{
   checked: boolean;
   onToggle: () => void;
 }> = ({ exercise, checked, onToggle }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('dashboard');
   return (
     <label className={`exercise-check-row ${checked ? 'checked' : ''}`}>
       <div className="exercise-checkbox" onClick={onToggle} role="checkbox" aria-checked={checked}>
@@ -286,7 +286,7 @@ const ExerciseCheckItem: React.FC<{
       </div>
       <div className="exercise-check-info">
         <span className="exercise-check-name">{exercise.name}</span>
-        <span className="exercise-check-detail">{t('dashboard.dailyQuest.exercise.setsRepsRest', { sets: exercise.sets, reps: exercise.reps, rest: exercise.restSeconds })}</span>
+        <span className="exercise-check-detail">{t('dailyQuest.exercise.setsRepsRest', { sets: exercise.sets, reps: exercise.reps, rest: exercise.restSeconds })}</span>
       </div>
     </label>
   );

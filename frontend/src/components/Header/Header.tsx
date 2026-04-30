@@ -12,7 +12,7 @@ import './Header.css';
 const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useUser();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('header');
 
   const handleLogout = () => {
     logout();
@@ -27,29 +27,29 @@ const Header: React.FC = () => {
   return (
     <header className="header">
       <Link to="/" className="header-logo">
-        <img src="/favicon.svg" alt={t('header.logoAlt')} width="28" height="28" />
+        <img src="/favicon.svg" alt={t('logoAlt')} width="28" height="28" />
         <span>QuestEngine</span>
       </Link>
 
-      <nav className="header-nav" aria-label={t('header.aria.mainNav')}>
-        <Link to="/" className="nav-link">{t('header.nav.home')}</Link>
-        <Link to="/dashboard" className="nav-link">{t('header.nav.dashboard')}</Link>
-        <Link to="/quest-generator" className="nav-link">{t('header.nav.questGenerator')}</Link>
+      <nav className="header-nav" aria-label={t('aria.mainNav')}>
+        <Link to="/" className="nav-link">{t('nav.home')}</Link>
+        <Link to="/dashboard" className="nav-link">{t('nav.dashboard')}</Link>
+        <Link to="/quest-generator" className="nav-link">{t('nav.questGenerator')}</Link>
       </nav>
 
       <div className="header-actions">
         <button
           className="language-toggle"
           onClick={toggleLanguage}
-          aria-label={t('header.language.label')}
-          title={t('header.language.label')}
+          aria-label={t('language.label')}
+          title={t('language.label')}
         >
           {i18n.language === 'de' ? '🇩🇪' : '🇬🇧'}
         </button>
 
         {isAuthenticated && user ? (
           <div className="header-auth">
-            <Link to="/settings" className="header-profile" aria-label={t('header.aria.openSettings')}>
+            <Link to="/settings" className="header-profile" aria-label={t('aria.openSettings')}>
               <span className="header-username">{user.name}</span>
               <img
                 src={user.profilePicture}
@@ -59,14 +59,14 @@ const Header: React.FC = () => {
                 height="36"
               />
             </Link>
-            <button className="header-logout-btn" onClick={handleLogout} aria-label={t('header.aria.logout')}>
-              {t('header.user.logout')}
+            <button className="header-logout-btn" onClick={handleLogout} aria-label={t('aria.logout')}>
+              {t('user.logout')}
             </button>
           </div>
         ) : (
           <div className="header-auth">
-            <Link to="/login" className="nav-link">{t('header.user.login')}</Link>
-            <Link to="/register" className="nav-link nav-link--cta">{t('header.user.register')}</Link>
+            <Link to="/login" className="nav-link">{t('user.login')}</Link>
+            <Link to="/register" className="nav-link nav-link--cta">{t('user.register')}</Link>
           </div>
         )}
       </div>

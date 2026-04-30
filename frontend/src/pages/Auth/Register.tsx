@@ -14,7 +14,7 @@ interface FormErrors {
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Register: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
   const { register } = useUser();
   const navigate = useNavigate();
 
@@ -29,27 +29,27 @@ const Register: React.FC = () => {
     const newErrors: FormErrors = {};
 
     if (!username.trim()) {
-      newErrors.username = t('register.form.errors.usernameRequired');
+      newErrors.username = t('form.errors.usernameRequired');
     } else if (username.trim().length < 3) {
-      newErrors.username = t('register.form.errors.usernameMinLength');
+      newErrors.username = t('form.errors.usernameMinLength');
     }
 
     if (!email.trim()) {
-      newErrors.email = t('register.form.errors.emailRequired');
+      newErrors.email = t('form.errors.emailRequired');
     } else if (!emailRegex.test(email.trim())) {
-      newErrors.email = t('register.form.errors.emailInvalid');
+      newErrors.email = t('form.errors.emailInvalid');
     }
 
     if (!password) {
-      newErrors.password = t('register.form.errors.passwordRequired');
+      newErrors.password = t('form.errors.passwordRequired');
     } else if (password.length < 6) {
-      newErrors.password = t('register.form.errors.passwordMinLength');
+      newErrors.password = t('form.errors.passwordMinLength');
     }
 
     if (!confirmPassword) {
-      newErrors.confirmPassword = t('register.form.errors.confirmRequired');
+      newErrors.confirmPassword = t('form.errors.confirmRequired');
     } else if (confirmPassword !== password) {
-      newErrors.confirmPassword = t('register.form.errors.passwordMismatch');
+      newErrors.confirmPassword = t('form.errors.passwordMismatch');
     }
 
     setErrors(newErrors);
@@ -64,7 +64,7 @@ const Register: React.FC = () => {
 
     const success = register(username.trim(), email.trim(), password);
     if (success) {
-      setSuccessMessage(t('register.success'));
+      setSuccessMessage(t('success'));
       setTimeout(() => {
         navigate('/login');
       }, 1500);
@@ -79,8 +79,8 @@ const Register: React.FC = () => {
 
   return (
     <div className="auth-container">
-      <h1 className="auth-title">{t('register.title')}</h1>
-      <p className="auth-subtitle">{t('register.subtitle')}</p>
+      <h1 className="auth-title">{t('title')}</h1>
+      <p className="auth-subtitle">{t('subtitle')}</p>
 
       {successMessage && (
         <div
@@ -98,7 +98,7 @@ const Register: React.FC = () => {
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <div className="form-group">
           <label htmlFor="register-username" className="form-label">
-            {t('register.form.username.label')}
+            {t('form.username.label')}
           </label>
           <input
             id="register-username"
@@ -109,7 +109,7 @@ const Register: React.FC = () => {
               setUsername(e.target.value);
               if (errors.username) setErrors((prev) => ({ ...prev, username: undefined }));
             }}
-            placeholder={t('register.form.username.placeholder')}
+            placeholder={t('form.username.placeholder')}
             autoComplete="username"
           />
           <div className="error-message">{errors.username || ''}</div>
@@ -117,7 +117,7 @@ const Register: React.FC = () => {
 
         <div className="form-group">
           <label htmlFor="register-email" className="form-label">
-            {t('register.form.email.label')}
+            {t('form.email.label')}
           </label>
           <input
             id="register-email"
@@ -128,7 +128,7 @@ const Register: React.FC = () => {
               setEmail(e.target.value);
               if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
             }}
-            placeholder={t('register.form.email.placeholder')}
+            placeholder={t('form.email.placeholder')}
             autoComplete="email"
           />
           <div className="error-message">{errors.email || ''}</div>
@@ -136,7 +136,7 @@ const Register: React.FC = () => {
 
         <div className="form-group">
           <label htmlFor="register-password" className="form-label">
-            {t('register.form.password.label')}
+            {t('form.password.label')}
           </label>
           <input
             id="register-password"
@@ -147,7 +147,7 @@ const Register: React.FC = () => {
               setPassword(e.target.value);
               if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }));
             }}
-            placeholder={t('register.form.password.placeholder')}
+            placeholder={t('form.password.placeholder')}
             autoComplete="new-password"
           />
           <div className="error-message">{errors.password || ''}</div>
@@ -155,7 +155,7 @@ const Register: React.FC = () => {
 
         <div className="form-group">
           <label htmlFor="register-confirm" className="form-label">
-            {t('register.form.confirmPassword.label')}
+            {t('form.confirmPassword.label')}
           </label>
           <input
             id="register-confirm"
@@ -166,23 +166,22 @@ const Register: React.FC = () => {
               setConfirmPassword(e.target.value);
               if (errors.confirmPassword) setErrors((prev) => ({ ...prev, confirmPassword: undefined }));
             }}
-            placeholder={t('register.form.confirmPassword.placeholder')}
+            placeholder={t('form.confirmPassword.placeholder')}
             autoComplete="new-password"
           />
           <div className="error-message">{errors.confirmPassword || ''}</div>
         </div>
 
         <button type="submit" className="auth-submit-btn" disabled={!isFormValid}>
-          {t('register.form.submit')}
+          {t('form.submit')}
         </button>
       </form>
 
       <p className="auth-footer">
-        {t('register.footer')} <Link to="/login">{t('header.user.login')}</Link>
+        {t('footer')} <Link to="/login">{t('user.login')}</Link>
       </p>
     </div>
   );
 };
 
 export default Register;
-

@@ -1,0 +1,24 @@
+{
+  "title": "Settings",
+  "subtitle": "Customize your adventurer profile.",
+  "unauthenticated": {
+    "subtitle": "You must be logged in to customize your profile.",
+    "loginButton": "Login to System"
+  },
+  "form": {
+    "name": {
+      "label": "Adventurer Name",
+      "placeholder": "Enter your name"
+    },
+    "avatar": {
+      "label": "Profile Picture URL",
+      "placeholder": "https://example.com/avatar.png"
+    },
+    "language": {
+      "label": "Language",
+      "en": "English",
+      "de": "German"
+    },
+    "submit": "Save Changes"
+  }
+}

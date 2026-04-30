@@ -1,0 +1,23 @@
+{
+  "logoAlt": "QuestEngine Logo",
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "questGenerator": "Quest Generator"
+  },
+  "aria": {
+    "mainNav": "Main navigation",
+    "openSettings": "Open settings",
+    "logout": "Logout"
+  },
+  "user": {
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "de": "German"
+  }
+}

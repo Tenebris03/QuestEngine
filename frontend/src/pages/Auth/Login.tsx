@@ -10,7 +10,7 @@ interface FormErrors {
 }
 
 const Login: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
   const { login } = useUser();
   const navigate = useNavigate();
 
@@ -23,15 +23,15 @@ const Login: React.FC = () => {
     const newErrors: FormErrors = {};
 
     if (!username.trim()) {
-      newErrors.username = t('login.form.errors.usernameRequired');
+      newErrors.username = t('form.errors.usernameRequired');
     } else if (username.trim().length < 3) {
-      newErrors.username = t('login.form.errors.usernameMinLength');
+      newErrors.username = t('form.errors.usernameMinLength');
     }
 
     if (!password) {
-      newErrors.password = t('login.form.errors.passwordRequired');
+      newErrors.password = t('form.errors.passwordRequired');
     } else if (password.length < 6) {
-      newErrors.password = t('login.form.errors.passwordMinLength');
+      newErrors.password = t('form.errors.passwordMinLength');
     }
 
     setErrors(newErrors);
@@ -48,7 +48,7 @@ const Login: React.FC = () => {
     if (success) {
       navigate('/dashboard');
     } else {
-      setAuthError(t('login.form.errors.invalidCredentials'));
+      setAuthError(t('form.errors.invalidCredentials'));
     }
   };
 
@@ -56,15 +56,15 @@ const Login: React.FC = () => {
 
   return (
     <div className="auth-container">
-      <h1 className="auth-title">{t('login.title')}</h1>
-      <p className="auth-subtitle">{t('login.subtitle')}</p>
+      <h1 className="auth-title">{t('title')}</h1>
+      <p className="auth-subtitle">{t('subtitle')}</p>
 
       {authError && <div className="auth-error">{authError}</div>}
 
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <div className="form-group">
           <label htmlFor="login-username" className="form-label">
-            {t('login.form.username.label')}
+            {t('form.username.label')}
           </label>
           <input
             id="login-username"
@@ -75,7 +75,7 @@ const Login: React.FC = () => {
               setUsername(e.target.value);
               if (errors.username) setErrors((prev) => ({ ...prev, username: undefined }));
             }}
-            placeholder={t('login.form.username.placeholder')}
+            placeholder={t('form.username.placeholder')}
             autoComplete="username"
           />
           <div className="error-message">{errors.username || ''}</div>
@@ -83,7 +83,7 @@ const Login: React.FC = () => {
 
         <div className="form-group">
           <label htmlFor="login-password" className="form-label">
-            {t('login.form.password.label')}
+            {t('form.password.label')}
           </label>
           <input
             id="login-password"
@@ -94,23 +94,22 @@ const Login: React.FC = () => {
               setPassword(e.target.value);
               if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }));
             }}
-            placeholder={t('login.form.password.placeholder')}
+            placeholder={t('form.password.placeholder')}
             autoComplete="current-password"
           />
           <div className="error-message">{errors.password || ''}</div>
         </div>
 
         <button type="submit" className="auth-submit-btn" disabled={!isFormValid}>
-          {t('login.form.submit')}
+          {t('form.submit')}
         </button>
       </form>
 
       <p className="auth-footer">
-        {t('login.footer')} <Link to="/register">{t('header.user.register')}</Link>
+        {t('footer')} <Link to="/register">{t('user.register')}</Link>
       </p>
     </div>
   );
 };
 
 export default Login;
-

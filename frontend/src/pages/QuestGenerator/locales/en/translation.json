@@ -1,0 +1,33 @@
+{
+  "title": "Quest Generator",
+  "subtitle": "Generate personalized fitness quests based on your goals and equipment.",
+  "webgpu": {
+    "warning": "WebGPU not available",
+    "description": "AI generation will not work. Please use Chrome or Edge in the latest version."
+  },
+  "progress": {
+    "generating": "Generating training plan...",
+    "regenerating": "Regenerating training plan..."
+  },
+  "error": {
+    "title": "Error",
+    "unexpected": "An unexpected error occurred.",
+    "retry": "Try Again"
+  },
+  "noPlan": {
+    "description": "No quests generated yet.",
+    "button": "Start Now"
+  },
+  "actions": {
+    "editPreferences": "Edit Preferences"
+  },
+  "weekdays": {
+    "0": "Sunday",
+    "1": "Monday",
+    "2": "Tuesday",
+    "3": "Wednesday",
+    "4": "Thursday",
+    "5": "Friday",
+    "6": "Saturday"
+  }
+}

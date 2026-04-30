@@ -1,0 +1,24 @@
+{
+  "title": "Einstellungen",
+  "subtitle": "Passe dein Abenteurer-Profil an.",
+  "unauthenticated": {
+    "subtitle": "Du musst angemeldet sein, um dein Profil anzupassen.",
+    "loginButton": "Zum Login"
+  },
+  "form": {
+    "name": {
+      "label": "Abenteurer-Name",
+      "placeholder": "Gib deinen Namen ein"
+    },
+    "avatar": {
+      "label": "Profilbild-URL",
+      "placeholder": "https://example.com/avatar.png"
+    },
+    "language": {
+      "label": "Sprache",
+      "en": "Englisch",
+      "de": "Deutsch"
+    },
+    "submit": "Änderungen speichern"
+  }
+}

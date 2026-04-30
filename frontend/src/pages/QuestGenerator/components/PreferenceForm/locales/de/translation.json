@@ -1,0 +1,54 @@
+{
+  "title": "Quest-Parameter festlegen",
+  "subtitle": "Definiere deine Ziele für den optimalen Trainingsplan.",
+  "fitnessGoal": {
+    "label": "Fitness-Ziel",
+    "options": {
+      "strength": "Kraftaufbau",
+      "endurance": "Ausdauer",
+      "weightloss": "Gewichtsverlust",
+      "muscle": "Muskelaufbau"
+    }
+  },
+  "availableTime": {
+    "label": "Verfügbare Zeit pro Session",
+    "options": {
+      "30": "30 Minuten",
+      "45": "45 Minuten",
+      "60": "60 Minuten",
+      "90": "90 Minuten",
+      "120": "120 Minuten"
+    }
+  },
+  "experienceLevel": {
+    "label": "Erfahrungslevel",
+    "options": {
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte"
+    }
+  },
+  "intensity": {
+    "label": "Intensität",
+    "value": "{{value}}/10",
+    "min": "Leicht",
+    "max": "Extrem"
+  },
+  "equipment": {
+    "label": "Verfügbares Equipment",
+    "options": {
+      "none": "Kein Equipment (Bodyweight)",
+      "pullupBar": "Klimmzugstange",
+      "dumbbells": "Hanteln",
+      "resistanceBands": "Resistance Bands",
+      "yogaMat": "Yoga-Matte"
+    }
+  },
+  "weekend": {
+    "label": "Wochenende inkludieren"
+  },
+  "buttons": {
+    "cancel": "Abbrechen",
+    "generate": "Plan generieren"
+  }
+}

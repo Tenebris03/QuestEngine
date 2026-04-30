@@ -1,0 +1,9 @@
+{
+  "title": "Dein Trainingsplan – Woche {{week}}",
+  "stats": {
+    "quests": "{{count}} Quests",
+    "duration": "{{minutes}} Minuten",
+    "completed": "{{completed}}/{{total}} abgeschlossen"
+  },
+  "regenerate": "Neue Quests generieren"
+}

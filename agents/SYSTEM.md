@@ -13,7 +13,7 @@
 
 ## Execution Protocol
 1. Read `PROJECT_CONTEXT.md` for architecture.
-2. Load relevant protocol (`TAILWIND_PROTOCOL.md` or `CODING_STANDARDS.md` and `I18N_PROTOCOL.md`).
+2. Load relevant protocol ( `CODING_STANDARDS.md` and `I18N_PROTOCOL.md`).
 3. Follow `AGENT_WORKFLOW.md` for task decomposition.
 4. Validate against `REVIEW_CHECKLIST.md` before marking complete.
 5. Output: `[TASK STATUS] | [FILES CHANGED] | [VALIDATION RESULTS] | [NEXT STEP]`

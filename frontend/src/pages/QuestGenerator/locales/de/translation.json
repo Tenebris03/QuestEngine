@@ -1,0 +1,24 @@
+{
+  "title": "Quest Generator",
+  "subtitle": "Generiere personalisierte Fitness-Quests basierend auf deinen Zielen und Equipment.",
+  "webgpu": {
+    "warning": "WebGPU nicht verfügbar",
+    "description": "Die KI-Generierung wird nicht funktionieren. Bitte verwende Chrome oder Edge in der neuesten Version."
+  },
+  "progress": {
+    "generating": "Trainingsplan wird generiert...",
+    "regenerating": "Trainingsplan wird neu generiert..."
+  },
+  "error": {
+    "title": "Fehler",
+    "unexpected": "Ein unerwarteter Fehler ist aufgetreten.",
+    "retry": "Erneut versuchen"
+  },
+  "noPlan": {
+    "description": "Noch keine Quests generiert.",
+    "button": "Jetzt starten"
+  },
+  "actions": {
+    "editPreferences": "Preferences bearbeiten"
+  }
+}

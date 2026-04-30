@@ -16,7 +16,7 @@ import './QuestGenerator.css';
  * Hauptkomponente der QuestGenerator Page.
  */
 const QuestGenerator: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('questGenerator');
   const {
     preferences,
     plan,
@@ -35,9 +35,9 @@ const QuestGenerator: React.FC = () => {
   return (
     <div className="quest-generator-page">
       <section className="quest-hero">
-        <h1 className="quest-hero-title">{t('questGenerator.title')}</h1>
+        <h1 className="quest-hero-title">{t('title')}</h1>
         <p className="quest-hero-subtitle">
-          {t('questGenerator.subtitle')}
+          {t('subtitle')}
         </p>
       </section>
 
@@ -45,9 +45,9 @@ const QuestGenerator: React.FC = () => {
       {!webgpuAvailable && (
         <div className="ai-progress-container warning">
           <p className="ai-progress-message">
-            <strong>⚠️ {t('questGenerator.webgpu.warning')}</strong>
+            <strong>⚠️ {t('webgpu.warning')}</strong>
             <br />
-            {t('questGenerator.webgpu.description')}
+            {t('webgpu.description')}
           </p>
         </div>
       )}
@@ -69,7 +69,7 @@ const QuestGenerator: React.FC = () => {
       {modelError && !aiProgress && (
         <div className="ai-progress-container error">
           <p className="ai-progress-message" style={{ marginBottom: '16px' }}>
-            <strong>❌ {t('questGenerator.error.title')}</strong>
+            <strong>❌ {t('error.title')}</strong>
             <br />
             {modelError}
           </p>
@@ -80,7 +80,7 @@ const QuestGenerator: React.FC = () => {
             disabled={isGenerating}
             style={{ padding: '10px 20px', fontSize: '0.9rem' }}
           >
-            {t('questGenerator.error.retry')}
+            {t('error.retry')}
           </button>
         </div>
       )}
@@ -103,7 +103,7 @@ const QuestGenerator: React.FC = () => {
               onClick={handleOpenForm}
               disabled={isGenerating}
             >
-              {t('questGenerator.actions.editPreferences')}
+              {t('actions.editPreferences')}
             </button>
           </div>
         </>
@@ -111,14 +111,14 @@ const QuestGenerator: React.FC = () => {
 
       {!plan && !showForm && (
         <div className="no-plan-message">
-          <p>{t('questGenerator.noPlan.description')}</p>
+          <p>{t('noPlan.description')}</p>
           <button
             type="button"
             className="btn-primary"
             onClick={handleOpenForm}
             disabled={isGenerating}
           >
-            {t('questGenerator.noPlan.button')}
+            {t('noPlan.button')}
           </button>
         </div>
       )}

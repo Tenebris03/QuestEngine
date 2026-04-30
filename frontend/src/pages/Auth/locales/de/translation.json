@@ -1,0 +1,36 @@
+{
+  "title": "System Login",
+  "subtitle": "Gib deine Zugangsdaten ein, um auf das System zuzugreifen.",
+  "form": {
+    "username": {
+      "label": "Benutzername",
+      "placeholder": "Gib deinen Benutzernamen ein"
+    },
+    "password": {
+      "label": "Passwort",
+      "placeholder": "Gib dein Passwort ein"
+    },
+    "submit": "Anmelden",
+    "errors": {
+      "usernameRequired": "Benutzername ist erforderlich.",
+      "usernameMinLength": "Benutzername muss mindestens 3 Zeichen lang sein.",
+      "passwordRequired": "Passwort ist erforderlich.",
+      "passwordMinLength": "Passwort muss mindestens 6 Zeichen lang sein.",
+      "invalidCredentials": "Ungültiger Benutzername oder Passwort."
+    }
+  },
+  "footer": "Noch kein Konto? <0>Hier registrieren</0>",
+  "success": "Registrierung erfolgreich! Weiterleitung zum Login...",
+  "email": {
+    "label": "E-Mail",
+    "placeholder": "deine@email.com"
+  },
+  "confirmPassword": {
+    "label": "Passwort bestätigen",
+    "placeholder": "Wiederhole dein Passwort"
+  },
+  "user": {
+    "login": "Anmelden",
+    "register": "Registrieren"
+  }
+}

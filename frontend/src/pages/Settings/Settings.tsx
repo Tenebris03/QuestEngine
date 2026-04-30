@@ -5,7 +5,7 @@ import { useUser } from '../../context/UserContext';
 import './Settings.css';
 
 const Settings: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('settings');
   const { user, updateUser, isAuthenticated } = useUser();
   const [name, setName] = useState(user?.name ?? '');
   const [profilePicture, setProfilePicture] = useState(user?.profilePicture ?? '');
@@ -22,10 +22,10 @@ const Settings: React.FC = () => {
   if (!isAuthenticated || !user) {
     return (
       <div className="settings-container">
-        <h1 className="settings-title">{t('settings.title')}</h1>
-        <p className="settings-subtitle">{t('settings.unauthenticated.subtitle')}</p>
+        <h1 className="settings-title">{t('title')}</h1>
+        <p className="settings-subtitle">{t('unauthenticated.subtitle')}</p>
         <Link to="/login" className="settings-save-btn" style={{ textDecoration: 'none', display: 'inline-flex' }}>
-          {t('settings.unauthenticated.loginButton')}
+          {t('unauthenticated.loginButton')}
         </Link>
       </div>
     );
@@ -33,8 +33,8 @@ const Settings: React.FC = () => {
 
   return (
     <div className="settings-container">
-      <h1 className="settings-title">{t('settings.title')}</h1>
-      <p className="settings-subtitle">{t('settings.subtitle')}</p>
+      <h1 className="settings-title">{t('title')}</h1>
+      <p className="settings-subtitle">{t('subtitle')}</p>
 
       <form className="settings-form" onSubmit={handleSave}>
         <div className="settings-preview">
@@ -50,7 +50,7 @@ const Settings: React.FC = () => {
 
         <div className="form-group">
           <label htmlFor="settings-name" className="form-label">
-            {t('settings.form.name.label')}
+            {t('form.name.label')}
           </label>
           <input
             id="settings-name"
@@ -58,14 +58,14 @@ const Settings: React.FC = () => {
             className="form-input"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder={t('settings.form.name.placeholder')}
+            placeholder={t('form.name.placeholder')}
             required
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="settings-avatar" className="form-label">
-            {t('settings.form.avatar.label')}
+            {t('form.avatar.label')}
           </label>
           <input
             id="settings-avatar"
@@ -73,13 +73,13 @@ const Settings: React.FC = () => {
             className="form-input"
             value={profilePicture}
             onChange={(e) => setProfilePicture(e.target.value)}
-            placeholder={t('settings.form.avatar.placeholder')}
+            placeholder={t('form.avatar.placeholder')}
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="settings-language" className="form-label">
-            {t('settings.form.language.label')}
+            {t('form.language.label')}
           </label>
           <select
             id="settings-language"
@@ -87,13 +87,13 @@ const Settings: React.FC = () => {
             value={i18n.language}
             onChange={(e) => handleLanguageChange(e.target.value)}
           >
-            <option value="en">{t('settings.form.language.en')}</option>
-            <option value="de">{t('settings.form.language.de')}</option>
+            <option value="en">{t('form.language.en')}</option>
+            <option value="de">{t('form.language.de')}</option>
           </select>
         </div>
 
         <button type="submit" className="settings-save-btn">
-          {t('settings.form.submit')}
+          {t('form.submit')}
         </button>
       </form>
     </div>
@@ -101,4 +101,3 @@ const Settings: React.FC = () => {
 };
 
 export default Settings;
-

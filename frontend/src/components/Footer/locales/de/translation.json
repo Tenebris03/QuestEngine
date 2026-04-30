@@ -1,0 +1,8 @@
+{
+  "links": {
+    "home": "Home",
+    "questGenerator": "Quest Generator",
+    "about": "Über uns"
+  },
+  "copyright": "© {{year}} QuestEngine. Alle Rechte vorbehalten. Gebaut mit React & Vite."
+}
