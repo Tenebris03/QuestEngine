@@ -23,7 +23,9 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
+  const [serverError, setServerError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
@@ -56,18 +58,28 @@ const Register: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setServerError('');
     setSuccessMessage('');
 
     if (!validate()) return;
 
-    const success = register(username.trim(), email.trim(), password);
-    if (success) {
-      setSuccessMessage(t('register.success'));
-      setTimeout(() => {
-        navigate('/login');
-      }, 1500);
+    setIsLoading(true);
+    try {
+      const success = await register(username.trim(), email.trim(), password);
+      if (success) {
+        setSuccessMessage(t('register.success'));
+        setTimeout(() => {
+          navigate('/login');
+        }, 1500);
+      } else {
+        setServerError(t('register.errors.generic'));
+      }
+    } catch (error) {
+      setServerError(error instanceof Error ? error.message : t('register.errors.generic'));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -81,6 +93,8 @@ const Register: React.FC = () => {
     <div className="auth-container">
       <h1 className="auth-title">{t('register.title')}</h1>
       <p className="auth-subtitle">{t('register.subtitle')}</p>
+
+      {serverError && <div className="auth-error">{serverError}</div>}
 
       {successMessage && (
         <div
@@ -172,8 +186,8 @@ const Register: React.FC = () => {
           <div className="error-message">{errors.confirmPassword || ''}</div>
         </div>
 
-        <button type="submit" className="auth-submit-btn" disabled={!isFormValid}>
-          {t('register.form.submit')}
+        <button type="submit" className="auth-submit-btn" disabled={!isFormValid || isLoading}>
+          {isLoading ? t('register.form.loading') : t('register.form.submit')}
         </button>
       </form>
 
@@ -185,4 +199,3 @@ const Register: React.FC = () => {
 };
 
 export default Register;
-

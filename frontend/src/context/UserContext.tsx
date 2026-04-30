@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { login as apiLogin, register as apiRegister } from '../services/authService';
+import type { BackendUser } from '../services/authService';
 
 export interface UserStats {
   strength: number;
@@ -8,7 +10,9 @@ export interface UserStats {
 }
 
 export interface User {
+  id: string;
   name: string;
+  email: string;
   profilePicture: string;
   level: number;
   experience: number;
@@ -19,26 +23,33 @@ export interface User {
 interface UserContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => boolean;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  register: (username: string, email: string, password: string) => boolean;
+  register: (name: string, email: string, password: string) => Promise<boolean>;
   updateUser: (updates: Partial<User>) => void;
   gainRewards: (xpGain: number, statGains: Partial<UserStats>) => void;
 }
 
-const mockUser: User = {
-  name: 'ShadowWalker',
-  profilePicture: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ShadowWalker',
-  level: 12,
-  experience: 3450,
-  maxExperience: 5000,
-  stats: {
-    strength: 18,
-    agility: 24,
-    intelligence: 15,
-    vitality: 20,
-  },
-};
+const TOKEN_KEY = 'questengine_token';
+const USER_KEY = 'questengine_user';
+
+function mapBackendUser(backendUser: BackendUser): User {
+  return {
+    id: backendUser.id,
+    name: backendUser.name,
+    email: backendUser.email,
+    profilePicture: backendUser.profilePicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${backendUser.name}`,
+    level: backendUser.level,
+    experience: backendUser.experience,
+    maxExperience: backendUser.maxExperience,
+    stats: {
+      strength: backendUser.strength,
+      agility: backendUser.agility,
+      intelligence: backendUser.intelligence,
+      vitality: backendUser.vitality,
+    },
+  };
+}
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
@@ -46,30 +57,65 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  const login = useCallback((username: string, password: string): boolean => {
-    if (username === 'admin' && password === 'admin123') {
-      setUser(mockUser);
+  // Restore session from localStorage on mount
+  useEffect(() => {
+    const token = localStorage.getItem(TOKEN_KEY);
+    const storedUser = localStorage.getItem(USER_KEY);
+    if (token && storedUser) {
+      try {
+        const parsedUser: User = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+      } catch {
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
+      }
+    }
+  }, []);
+
+  const login = useCallback(async (email: string, password: string): Promise<boolean> => {
+    try {
+      const response = await apiLogin({ email, password });
+      const mappedUser = mapBackendUser(response.user);
+
+      localStorage.setItem(TOKEN_KEY, response.accessToken);
+      localStorage.setItem(USER_KEY, JSON.stringify(mappedUser));
+
+      setUser(mappedUser);
       setIsAuthenticated(true);
       return true;
+    } catch (error) {
+      console.error('Login failed:', error);
+      return false;
     }
-    return false;
   }, []);
 
   const logout = useCallback(() => {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
     setUser(null);
     setIsAuthenticated(false);
   }, []);
 
-  const register = useCallback((username: string, email: string, password: string): boolean => {
-    console.log('Registered:', { username, email, password });
-    return true;
+  const register = useCallback(async (name: string, email: string, password: string): Promise<boolean> => {
+    try {
+      await apiRegister({ name, email, password });
+      return true;
+    } catch (error) {
+      console.error('Registration failed:', error);
+      return false;
+    }
   }, []);
 
   const updateUser = useCallback((updates: Partial<User>) => {
-    setUser((prev) => (prev ? { ...prev, ...updates } : null));
+    setUser((prev) => {
+      if (!prev) return null;
+      const updated = { ...prev, ...updates };
+      localStorage.setItem(USER_KEY, JSON.stringify(updated));
+      return updated;
+    });
   }, []);
 
-  // Neue Funktion für XP und Stats inkl. Level-Up Logik
   const gainRewards = useCallback((xpGain: number, statGains: Partial<UserStats>) => {
     setUser((prev) => {
       if (!prev) return prev;
@@ -78,14 +124,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       let newLevel = prev.level;
       let newMaxXp = prev.maxExperience;
 
-      // Level-Up Loop: Falls man genug XP für mehrere Level sammelt
       while (newXp >= newMaxXp) {
         newXp -= newMaxXp;
         newLevel += 1;
-        newMaxXp = Math.floor(newMaxXp * 1.2); // Jedes Level benötigt 20% mehr XP
+        newMaxXp = Math.floor(newMaxXp * 1.2);
       }
 
-      return {
+      const updated = {
         ...prev,
         level: newLevel,
         experience: newXp,
@@ -97,6 +142,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
           vitality: prev.stats.vitality + (statGains.vitality || 0),
         },
       };
+
+      localStorage.setItem(USER_KEY, JSON.stringify(updated));
+      return updated;
     });
   }, []);
 

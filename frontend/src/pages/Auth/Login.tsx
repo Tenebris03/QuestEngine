@@ -5,54 +5,64 @@ import { useUser } from '../../context/UserContext';
 import './Auth.css';
 
 interface FormErrors {
-  username?: string;
+  email?: string;
   password?: string;
 }
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
   const { login } = useUser();
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
   const [authError, setAuthError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!username.trim()) {
-      newErrors.username = t('login.form.errors.usernameRequired');
-    } else if (username.trim().length < 3) {
-      newErrors.username = t('login.form.errors.usernameMinLength');
+    if (!email.trim()) {
+      newErrors.email = t('login.form.email.errors.required');
+    } else if (!emailRegex.test(email.trim())) {
+      newErrors.email = t('login.form.email.errors.invalid');
     }
 
     if (!password) {
-      newErrors.password = t('login.form.errors.passwordRequired');
+      newErrors.password = t('login.form.password.errors.required');
     } else if (password.length < 6) {
-      newErrors.password = t('login.form.errors.passwordMinLength');
+      newErrors.password = t('login.form.password.errors.minLength');
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError('');
 
     if (!validate()) return;
 
-    const success = login(username.trim(), password);
-    if (success) {
-      navigate('/dashboard');
-    } else {
+    setIsLoading(true);
+    try {
+      const success = await login(email.trim(), password);
+      if (success) {
+        navigate('/dashboard');
+      } else {
+        setAuthError(t('login.form.errors.invalidCredentials'));
+      }
+    } catch {
       setAuthError(t('login.form.errors.invalidCredentials'));
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const isFormValid = username.trim().length >= 3 && password.length >= 6;
+  const isFormValid = emailRegex.test(email.trim()) && password.length >= 6;
 
   return (
     <div className="auth-container">
@@ -63,22 +73,22 @@ const Login: React.FC = () => {
 
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <div className="form-group">
-          <label htmlFor="login-username" className="form-label">
-            {t('login.form.username.label')}
+          <label htmlFor="login-email" className="form-label">
+            {t('login.form.email.label')}
           </label>
           <input
-            id="login-username"
-            type="text"
-            className={`form-input ${errors.username ? 'error' : ''}`}
-            value={username}
+            id="login-email"
+            type="email"
+            className={`form-input ${errors.email ? 'error' : ''}`}
+            value={email}
             onChange={(e) => {
-              setUsername(e.target.value);
-              if (errors.username) setErrors((prev) => ({ ...prev, username: undefined }));
+              setEmail(e.target.value);
+              if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
             }}
-            placeholder={t('login.form.username.placeholder')}
-            autoComplete="username"
+            placeholder={t('login.form.email.placeholder')}
+            autoComplete="email"
           />
-          <div className="error-message">{errors.username || ''}</div>
+          <div className="error-message">{errors.email || ''}</div>
         </div>
 
         <div className="form-group">
@@ -100,8 +110,8 @@ const Login: React.FC = () => {
           <div className="error-message">{errors.password || ''}</div>
         </div>
 
-        <button type="submit" className="auth-submit-btn" disabled={!isFormValid}>
-          {t('login.form.submit')}
+        <button type="submit" className="auth-submit-btn" disabled={!isFormValid || isLoading}>
+          {isLoading ? t('login.form.loading') : t('login.form.submit')}
         </button>
       </form>
 
@@ -113,4 +123,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-
