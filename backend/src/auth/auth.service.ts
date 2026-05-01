@@ -27,7 +27,7 @@ export class AuthService {
     };
   }
 
-  async register(userData: { email: string; password: string; firstName?: string; lastName?: string }) {
+async register(userData: { email: string; password: string; firstName?: string; lastName?: string }) {
     const existingUser = await this.usersService.findOne(userData.email);
     if (existingUser) {
       throw new UnauthorizedException('User already exists');
@@ -38,6 +38,37 @@ export class AuthService {
       profilePicture: `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.email}`,
       stats: { strength: 10, agility: 10, intelligence: 10, vitality: 10 },
     });
+    const { password, ...result } = user;
+    return result;
+  }
+
+  async validateOAuthLogin(
+    email: string,
+    provider: 'google' | 'github' | 'discord',
+    profile: { providerId: string; email: string; displayName?: string; profilePicture?: string },
+  ): Promise<any> {
+    // Find user by social ID first
+    let user = await this.usersService.findBySocialId(provider, profile.providerId);
+    
+    if (!user) {
+      // Check if user exists with this email (could be regular login)
+      user = await this.usersService.findOne(email);
+      
+      if (user) {
+        // Link existing account to social login
+        user = await this.usersService.linkSocialAccount(user.id, provider, profile.providerId);
+      } else {
+        // Create new user with social login (Level 1 - starter)
+        user = await this.usersService.createOAuthUser({
+          email,
+          name: profile.displayName || email.split('@')[0],
+          profilePicture: profile.profilePicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
+          provider,
+          providerId: profile.providerId,
+        });
+      }
+    }
+    
     const { password, ...result } = user;
     return result;
   }

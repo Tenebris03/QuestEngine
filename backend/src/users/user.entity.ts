@@ -32,13 +32,23 @@ export class User {
   @Column({ default: 1000 })
   maxExperience: number;
 
-  @Column('json', { nullable: true })
+@Column('json', { nullable: true })
   stats: {
     strength: number;
     agility: number;
     intelligence: number;
     vitality: number;
   };
+
+  // Social Login IDs
+  @Column({ nullable: true })
+  googleId: string;
+
+  @Column({ nullable: true })
+  githubId: string;
+
+  @Column({ nullable: true })
+  discordId: string;
 
   @CreateDateColumn()
   createdAt: Date;

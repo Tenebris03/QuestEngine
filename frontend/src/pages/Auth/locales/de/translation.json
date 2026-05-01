@@ -35,8 +35,11 @@
     "label": "Passwort bestätigen",
     "placeholder": "Wiederhole dein Passwort"
   },
-  "user": {
+"user": {
     "login": "Anmelden",
     "register": "Registrieren"
+  },
+  "social": {
+    "orContinueWith": "oder weiter mit"
   }
 }

@@ -171,3 +171,94 @@
   }
 }
 
+/* Social Login Styles */
+.social-login-divider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: var(--space-md) 0;
+}
+
+.social-login-divider::before,
+.social-login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--glass-border);
+}
+
+.social-login-divider span {
+  padding: 0 var(--space-md);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.social-login-buttons {
+  display: flex;
+  gap: var(--space-md);
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.social-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 12px 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.social-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.social-login-btn svg {
+  flex-shrink: 0;
+}
+
+.social-login-btn.google {
+  background: #ffffff;
+  border-color: #dadce0;
+  color: #3c4043;
+}
+
+.social-login-btn.google:hover {
+  background: #f8f9fa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.social-login-btn.github {
+  background: #24292e;
+  border-color: #24292e;
+  color: #ffffff;
+}
+
+.social-login-btn.github:hover {
+  background: #2f363d;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.social-login-btn.discord {
+  background: #5865f2;
+  border-color: #5865f2;
+  color: #ffffff;
+}
+
+.social-login-btn.discord:hover {
+  background: #4752c4;
+  box-shadow: 0 4px 12px rgba(88, 101, 242, 0.4);
+}
+

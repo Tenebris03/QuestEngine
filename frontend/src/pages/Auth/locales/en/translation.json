@@ -23,7 +23,11 @@
       "passwordRequired": "Password is required.",
       "passwordMinLength": "Password must be at least 6 characters.",
       "invalidCredentials": "Invalid email or password."
-    }
+    },
+  "confirmPassword": {
+    "label": "Confirm Password",
+    "placeholder": "Repeat your password"
+  }
   },
   "footer": "No account yet? <0>Register here</0>",
   "success": "Registration successful! Redirecting to login...",
@@ -31,12 +35,11 @@
     "label": "Email",
     "placeholder": "your@email.com"
   },
-  "confirmPassword": {
-    "label": "Confirm Password",
-    "placeholder": "Repeat your password"
-  },
-  "user": {
+"user": {
     "login": "Login",
     "register": "Register"
+  },
+  "social": {
+    "orContinueWith": "or continue with"
   }
 }
