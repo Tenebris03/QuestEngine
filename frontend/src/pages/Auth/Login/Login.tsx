@@ -5,16 +5,18 @@ import { useUser } from '../../../context/UserContext';
 import '../Auth.css';
 
 interface FormErrors {
-  username?: string;
+  email?: string;
   password?: string;
 }
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Login: React.FC = () => {
   const { t } = useTranslation('auth');
   const { login } = useUser();
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
   const [authError, setAuthError] = useState('');
@@ -22,10 +24,10 @@ const Login: React.FC = () => {
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!username.trim()) {
-      newErrors.username = t('form.errors.usernameRequired');
-    } else if (username.trim().length < 3) {
-      newErrors.username = t('form.errors.usernameMinLength');
+    if (!email.trim()) {
+      newErrors.email = t('form.errors.emailRequired');
+    } else if (!emailRegex.test(email.trim())) {
+      newErrors.email = t('form.errors.emailInvalid');
     }
 
     if (!password.trim()) {
@@ -38,13 +40,13 @@ const Login: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError('');
 
     if (!validate()) return;
 
-    const success = login(username.trim(), password.trim());
+    const success = await login(email.trim(), password.trim());
     if (success) {
       navigate('/dashboard');
     } else {
@@ -52,7 +54,7 @@ const Login: React.FC = () => {
     }
   };
 
-  const isFormValid = username.trim().length >= 3 && password.trim().length >= 6;
+  const isFormValid = emailRegex.test(email.trim()) && password.trim().length >= 6;
 
   return (
     <div className="auth-container">
@@ -61,24 +63,24 @@ const Login: React.FC = () => {
 
       {authError && <div className="auth-error">{authError}</div>}
 
-      <form className="auth-form" onSubmit={handleSubmit} noValidate>
+<form className="auth-form" onSubmit={handleSubmit} noValidate>
         <div className="form-group">
-          <label htmlFor="login-username" className="form-label">
-            {t('form.username.label')}
+          <label htmlFor="login-email" className="form-label">
+            {t('form.email.label')}
           </label>
           <input
-            id="login-username"
-            type="text"
-            className={`form-input ${errors.username ? 'error' : ''}`}
-            value={username}
+            id="login-email"
+            type="email"
+            className={`form-input ${errors.email ? 'error' : ''}`}
+            value={email}
             onChange={(e) => {
-              setUsername(e.target.value);
-              if (errors.username) setErrors((prev) => ({ ...prev, username: undefined }));
+              setEmail(e.target.value);
+              if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
             }}
-            placeholder={t('form.username.placeholder')}
-            autoComplete="username"
+            placeholder={t('form.email.placeholder')}
+            autoComplete="email"
           />
-          <div className="error-message">{errors.username || ''}</div>
+          <div className="error-message">{errors.email || ''}</div>
         </div>
 
         <div className="form-group">

@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
+import axios from 'axios';
+
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
 
 export interface UserStats {
   strength: number;
@@ -8,61 +11,72 @@ export interface UserStats {
 }
 
 export interface User {
-  name: string;
-  profilePicture: string;
+  id: number;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  name?: string;
+  profilePicture?: string;
   level: number;
   experience: number;
   maxExperience: number;
   stats: UserStats;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface UserContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => boolean;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  register: (username: string, email: string, password: string) => boolean;
+  register: (email: string, password: string, firstName?: string, lastName?: string) => Promise<boolean>;
   updateUser: (updates: Partial<User>) => void;
+  loading: boolean;
 }
-
-const mockUser: User = {
-  name: 'ShadowWalker',
-  profilePicture: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ShadowWalker',
-  level: 12,
-  experience: 3450,
-  maxExperience: 5000,
-  stats: {
-    strength: 18,
-    agility: 24,
-    intelligence: 15,
-    vitality: 20,
-  },
-};
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const login = useCallback((username: string, password: string): boolean => {
-    if (username === 'admin' && password === 'admin123') {
-      setUser(mockUser);
+  const login = useCallback(async (email: string, password: string): Promise<boolean> => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
+      const { access_token, user: userData } = response.data;
+      localStorage.setItem('token', access_token);
+      setUser(userData);
       setIsAuthenticated(true);
       return true;
+    } catch (error) {
+      console.error('Login failed:', error);
+      return false;
+    } finally {
+      setLoading(false);
     }
-    return false;
   }, []);
 
   const logout = useCallback(() => {
+    localStorage.removeItem('token');
     setUser(null);
     setIsAuthenticated(false);
   }, []);
 
-  const register = useCallback((username: string, email: string, password: string): boolean => {
-    // Dummy-Registrierung ohne Backend – immer erfolgreich
-    console.log('Registered:', { username, email, password });
-    return true;
+  const register = useCallback(async (email: string, password: string, firstName?: string, lastName?: string): Promise<boolean> => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/register`, { email, password, firstName, lastName });
+      console.log('Registered:', response.data);
+      return true;
+    } catch (error) {
+      console.error('Registration failed:', error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const updateUser = useCallback((updates: Partial<User>) => {
@@ -70,7 +84,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, isAuthenticated, login, logout, register, updateUser }}>
+    <UserContext.Provider value={{ user, isAuthenticated, login, logout, register, updateUser, loading }}>
       {children}
     </UserContext.Provider>
   );
@@ -83,4 +97,3 @@ export const useUser = (): UserContextType => {
   }
   return context;
 };
-

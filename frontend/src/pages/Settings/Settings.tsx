@@ -43,7 +43,7 @@ const Settings: React.FC = () => {
             alt="Profile preview"
             className="settings-avatar"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = user.profilePicture;
+              (e.target as HTMLImageElement).src = user.profilePicture || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default';
             }}
           />
         </div>

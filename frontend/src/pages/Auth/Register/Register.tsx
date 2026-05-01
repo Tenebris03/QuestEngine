@@ -40,15 +40,15 @@ const Register: React.FC = () => {
       newErrors.email = t('form.errors.emailInvalid');
     }
 
-    if (!password.trim()) {
+    if (!password) {
       newErrors.password = t('form.errors.passwordRequired');
-    } else if (password.trim().length < 6) {
+    } else if (password.length < 6) {
       newErrors.password = t('form.errors.passwordMinLength');
     }
 
-    if (!confirmPassword.trim()) {
+    if (!confirmPassword) {
       newErrors.confirmPassword = t('form.errors.confirmRequired');
-    } else if (confirmPassword.trim() !== password.trim()) {
+    } else if (confirmPassword !== password) {
       newErrors.confirmPassword = t('form.errors.passwordMismatch');
     }
 
@@ -56,13 +56,15 @@ const Register: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSuccessMessage('');
 
     if (!validate()) return;
 
-    const success = register(username.trim(), email.trim(), password.trim());
+    // Register expects: (email, password, firstName, lastName)
+    const success = await register(email.trim(), password, username.trim());
+    
     if (success) {
       setSuccessMessage(t('success'));
       setTimeout(() => {
@@ -74,8 +76,8 @@ const Register: React.FC = () => {
   const isFormValid =
     username.trim().length >= 3 &&
     emailRegex.test(email.trim()) &&
-    password.trim().length >= 6 &&
-    confirmPassword.trim() === password.trim();
+    password.length >= 6 &&
+    confirmPassword === password;
 
   return (
     <div className="auth-container">
@@ -83,7 +85,14 @@ const Register: React.FC = () => {
       <p className="auth-subtitle">{t('subtitle')}</p>
 
       {successMessage && (
-        <div className="auth-success">
+        <div
+          className="auth-error"
+          style={{
+            background: 'var(--success-soft)',
+            borderColor: 'rgba(16, 185, 129, 0.2)',
+            color: 'var(--success)',
+          }}
+        >
           {successMessage}
         </div>
       )}
