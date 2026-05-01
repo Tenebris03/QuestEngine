@@ -2,8 +2,6 @@
 
 A fitness quest generator application with AI-powered training plan generation. QuestEngine creates personalized weekly workout plans based on user preferences, using either client-side WebLLM (local AI) or algorithmic generation.
 
-![QuestEngine Logo](frontend/public/QuestEngineLogo.png)
-
 ## Features
 
 - **AI-Powered Generation**: Uses WebLLM (Llama-3.2-1B-Instruct) running entirely in the browser for personalized training plans
